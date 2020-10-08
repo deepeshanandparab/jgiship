@@ -1,0 +1,270 @@
+body{
+    background: #DCDCDC!important;
+    font-family: 'Open Sans',sans-serif!important;
+}
+
+p, ul, li, div, nav{
+    padding:0;
+    margin:0;
+}
+
+#menu {
+    overflow: auto;
+    position:relative;
+    z-index:2;
+}
+
+.parent-menu {
+    background-color: #F5F5F5;
+    float:left;
+}
+
+#menu ul{
+    list-style-type:none;
+}
+
+#menu ul li a{
+    padding:10px 15px;
+    display:block;
+    color:#000;
+    font-size: 13px!important;
+    text-decoration:none;
+    text-align: center!important;
+}
+
+#menu ul li a:hover{
+    background: #cfcfcf!important;
+}
+
+#menu ul li:hover > ul {
+    left: 93px;
+    z-index:2!important;
+    margin-top: -68px!important;
+    -webkit-transition: top 200ms ease-in;
+    -moz-transition: top 200ms ease-in;
+    -ms-transition: top 200ms ease-in;
+    transition: top 200ms ease-in;
+}
+
+#menu ul li > ul {
+    position: absolute;
+    background-color: #cfcfcf;
+    left: -200px;
+    min-width: 200px;
+    -webkit-transition: top 200ms fade-in;
+    -moz-transition: top 200ms ease-in;
+    -ms-transition: top 200ms ease-in;
+    transition: left 200ms fade-in;
+}
+
+#menu ul li > ul  li a{
+    text-align: left!important;
+}
+
+#menu ul li > ul li a:hover {
+    background: #F5F5F5!important;
+}
+
+.orders-top-nav{
+    background-color: #F5F5F5!important;
+}
+
+.orders-content-section{
+    margin: 20px 20px 0px 100px;
+    border-radius: 20px;
+    padding: 30px 10px;
+}
+
+.submenu-text{
+    vertical-align: super!important;
+}
+
+.font-100{
+    font-size: 100px!important;
+}
+
+
+/* Make circles that indicate the steps of the form: */
+.circle {
+  height: 25px;
+  width: 25px;
+  padding-top: 3px!important;
+  margin-right: 10px;
+  background-color: #cfcfcf;
+  border: none;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.no-text-decoration{
+    text-decoration: none!important;
+}
+
+.font-bold{
+    font-weight: bold!important;
+}
+
+.vertical-align-bottom{
+    vertical-align: bottom!important;
+}
+
+.float-right{
+    float: right!important;
+}
+
+.float-left{
+    float: left!important;
+}
+
+.buyer-form label{
+    font-size: 13px;
+}
+
+.buyer-form input[type=text], input[type=password], input[type=email], input[type=number], input[type=date], select, button{
+    border-radius: 30px!important;
+    font-size: 13px!important;
+}
+
+.labelled-input input[type=number]{
+    border-radius: 0px 30px 30px 0px!important;
+    font-size: 13px!important;
+}
+
+input[type=number], input[type=date]{
+    font-size: 13px!important;
+}
+
+.labelled-input .input-group-text{
+    font-size: 13px!important;
+    border-radius: 30px 0px 0px 30px!important;
+}
+
+::placeholder {
+  font-size: 13px!important;
+}
+
+:-ms-input-placeholder {
+  font-size: 13px!important;
+}
+
+::-ms-input-placeholder {
+  font-size: 13px!important;
+}
+
+select {
+  font-size: 13px!important;
+}
+
+.help-text{
+    border: 1px solid #cfcfcf!important;
+    border-radius: 5px;
+    background: white!important;
+    padding: 20px;
+}
+
+.help-text p{
+    font-size: 13px!important;
+}
+
+.pointer{
+    cursor: pointer!important;
+}
+
+.button-circle {
+  height: 30px;
+  width: 30px;
+  font-size: 16px;
+  background-color: #cfcfcf;
+  border: none;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.p-8px{
+    padding: 8px!important;
+}
+
+.p-7px{
+    padding: 7px!important;
+}
+
+.font-8{
+    font-size: 8px!important;
+}
+
+.font-9{
+    font-size: 9px!important;
+}
+
+.font-10{
+    font-size: 10px!important;
+}
+
+
+.font-11{
+    font-size: 11px!important;
+}
+
+.font-12{
+    font-size: 12px!important;
+}
+
+.font-13{
+    font-size: 13px!important;
+}
+
+.font-20{
+    font-size: 20px!important;
+}
+
+.pt-5per{
+    padding-top: 5%!important;
+}
+
+
+#package-details input[type=number]{
+    border-radius: 30px 0px 0px 30px!important;
+}
+
+#package-details .input-group-text{
+    font-size: 13px!important;
+    border-radius: 0px 30px 30px 0px!important;
+}
+
+.pl-5px{
+    padding-left: 5px!important;
+}
+
+.border-light-grey{
+    border: 1px solid #cfcfcf;
+}
+
+.border-radius-top{
+    border-radius: 30px 30px 0px 0px!important;
+}
+
+.border-radius-bottom{
+    border-radius: 0px 0px 30px 30px!important;
+}
+
+.address-line-circle {
+  height: 30px;
+  width: 30px;
+  padding-left: 8px!important;
+  background-color: #fff;
+  border: 1px solid #cfcfcf;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.border-right-5px-white{
+    border-right: 10px solid transparent!important;
+}
+
+.pickup-address-section{
+    height: 200px!important;
+}
+
+.mt-3px{
+    margin-top: 3px!important;
+}

@@ -1,0 +1,669 @@
+{% extends 'jgiship/base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-9">
+        <div id="accordion">
+            <form class="buyer-form">
+                <!------------------------------------------------- Step One --------------------------------------------->
+                <div class="card">
+                    <div class="card-header bg-success" id="headingOne">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link text-dark no-text-decoration w-100 px-0" data-toggle="collapse"
+                                    data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                <span class="circle font-bold float-left">1</span>
+<!--                                <span class="circle font-bold float-left bg-success"><i class="fa fa-check"></i></span>-->
+                                <span class="float-left font-bold ml-4 mt-3px">Buyer Details</span>
+                                <i class="fa fa-chevron-down chevron float-right mt-1"></i>
+                            </button>
+                        </h5>
+                    </div>
+
+                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                        <div class="card-body">
+                            <h6>Buyer Details</h6>
+                            <!-----------------------------------Delivery Address Form------------------------------->
+                            <div class="form-row">
+                                <div class="form-group col-md-3">
+                                    <label for="buyer_name">Buyer Name</label>
+                                    <input type="text" class="form-control" id="buyer_name"
+                                           placeholder="Enter Buyer Name"
+                                           required>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="phone_number">Phone Number</label>
+                                    <div class="input-group labelled-input">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">+91</div>
+                                        </div>
+                                        <input type="number" class="form-control" id="phone_number"
+                                               placeholder="Enter Phone Number" required>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="alternate_phone_number">Alternate Phone Number</label>
+                                    <div class="input-group labelled-input">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">+91</div>
+                                        </div>
+                                        <input type="number" class="form-control" id="alternate_phone_number"
+                                               placeholder="Enter Phone Number">
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="email">Email Id</label>
+                                    <input type="email" class="form-control" id="email" placeholder="Enter Email Id"
+                                           required>
+                                </div>
+                            </div>
+                            <hr>
+                            <h6>Buyer Address</h6>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="address1">Address Line 1</label>
+                                    <input type="text" class="form-control" id="address1" placeholder="Enter Address"
+                                           required>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="address2">Address Line 2</label>
+                                    <input type="text" class="form-control" id="address2" placeholder="Enter Address">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-3">
+                                    <label for="pincode">Pincode</label>
+                                    <input type="text" class="form-control" id="pincode" placeholder="Enter Pincode"
+                                           required>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="city">City</label>
+                                    <input type="text" class="form-control" id="city" placeholder="Enter City" required>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="state">State</label>
+                                    <select id="state" class="form-control" required>
+                                        <option value="None" selected>Please Select State...</option>
+                                        <option>...</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="country">Country</label>
+                                    <select id="country" class="form-control" required>
+                                        <option value="None" selected>Choose...</option>
+                                        <option value="India" selected>India</option>
+                                        <option>...</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="company">Company Name <small>(Optional)</small></label>
+                                    <input type="text" class="form-control" id="company"
+                                           placeholder="Enter Company Name">
+                                </div>
+                            </div>
+                            <!-------------------------------------------------------------------------------------------->
+
+
+                            <div class="form-group">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="hyperlocal-shipment"
+                                           onclick="showLocationMap()">
+                                    <label class="form-check-label" for="hyperlocal-shipment">
+                                        Select For Hyperlocal Shipment
+                                    </label>
+
+                                    <div id="location-map" style="display: none">
+                                        <input class="form-control my-2" type="text" id="map-location-text">
+                                        <div class="map-responsive">
+                                            <iframe src="https://maps.google.com/maps?q=AthletixCricketAcademy&t=k&z=13&ie=UTF8&iwloc=&output=embed"
+                                                    height="400" class="col-12 px-0" frameborder="0" style="border:0"
+                                                    allowfullscreen></iframe>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="billing-address_checkbox"
+                                           onclick="showBillingForm()" checked>
+                                    <label class="form-check-label" for="billing-address_checkbox">
+                                        Billing address same as delivery address
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!----------------------------------Billing Address Form -------------------------------->
+                            <div id="billing-address-form" style="display: none">
+                                <h6>Buyer Details</h6>
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <label for="billing_name">Buyer Name</label>
+                                        <input type="text" class="form-control" id="billing_name"
+                                               placeholder="Enter Buyer Name">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="billing_phone_number">Phone Number</label>
+                                        <div class="input-group labelled-input">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">+91</div>
+                                            </div>
+                                            <input type="number" class="form-control" id="billing_phone_number"
+                                                   placeholder="Enter Phone Number">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="billing_email">Email Id</label>
+                                        <input type="email" class="form-control" id="billing_email"
+                                               placeholder="Enter Email Id">
+                                    </div>
+                                </div>
+                                <hr>
+                                <h6>Buyer Address</h6>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="billing_address1">Address Line 1</label>
+                                        <input type="text" class="form-control" id="billing_address1"
+                                               placeholder="Enter Address">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="billing_address2">Address Line 2</label>
+                                        <input type="text" class="form-control" id="billing_address2"
+                                               placeholder="Enter Address">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-3">
+                                        <label for="billing_pincode">Pincode</label>
+                                        <input type="text" class="form-control" id="billing_pincode"
+                                               placeholder="Enter Pincode">
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="billing_city">City</label>
+                                        <input type="text" class="form-control" id="billing_city"
+                                               placeholder="Enter City">
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="billing_state">State</label>
+                                        <select id="billing_state" class="form-control">
+                                            <option value="None" selected>Please Select State...</option>
+                                            <option>...</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="billing_country">Country</label>
+                                        <select id="billing_country" class="form-control">
+                                            <option value="None" selected>Choose...</option>
+                                            <option value="India" selected>India</option>
+                                            <option>...</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="billing_company">Company Name <small>(Optional)</small></label>
+                                        <input type="text" class="form-control" id="billing_company"
+                                               placeholder="Enter Company Name">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-------------------------------------------------------------------------------------------->
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button class="btn btn-primary mt-1 float-right px-4">Next</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!---------------------------------------------------------------------------------------------------------->
+
+
+                <!------------------------------------------------- Form Two ------------------------------------------>
+                <div class="card">
+                    <div class="card-header" id="headingTwo">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link text-dark no-text-decoration w-100 px-0 collapsed"
+                                    data-toggle="collapse"
+                                    data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                <span class="circle font-bold float-left">2</span>
+                                <span class="float-left font-bold ml-4 mt-3px">Order Details</span>
+                                <i class="fa fa-chevron-right chevron float-right mt-1"></i>
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                        <div class="card-body">
+                            <h6>Order Details</h6>
+                            <!-----------------------------------Delivery Address Form------------------------------->
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <label for="order_id">Order Id</label>
+                                    <input type="number" class="form-control" id="order_id"
+                                           placeholder="Order Id"
+                                           required>
+                                    <button class="btn btn-primary mt-1 btn-sm" onclick="generate_order_id()">Generate
+                                    </button>
+                                </div>
+                                <div class="form-group col-md-4" id="datePicker">
+                                    <label for="order_date">Order Date</label>
+                                    <input type="date" class="form-control" id="order_date" required>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="order_channel">Order Channel</label>
+                                    <select id="order_channel" class="form-control">
+                                        <option value="None" selected>Select Channel</option>
+                                        <option value="custom">Custom</option>
+                                        <option value="justgetit">JustGetIt</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <hr>
+                            <h6>Product Details</h6>
+                            <div class="form-row">
+                                <div class="form-group col-md-2">
+                                    <label for="product_name">Product Name</label>
+                                    <input type="text" class="form-control" id="product_name"
+                                           placeholder="Enter Product Name"
+                                           required>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label for="sku">SKU</label>
+                                    <input type="text" class="form-control" id="sku" placeholder="Enter SKU" required>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label for="quantity">Quantity</label>
+                                    <input type="number" class="form-control" id="quantity" placeholder="Enter Quantity"
+                                           required>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label for="unit_price">Unit Price</label>
+                                    <input type="number" class="form-control" id="unit_price"
+                                           placeholder="Enter Unit Price" required>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label for="tax_rate">Tax Rate <small>(Optional)</small></label>
+                                    <input type="number" class="form-control" id="tax_rate"
+                                           placeholder="Enter Tax Rate">
+                                </div>
+                                <div class="col-md-2 text-center pt-5per" id="product-details-buttons">
+                                    <i class="fa fa-chevron-up button-circle text-primary pointer p-7px chevron"
+                                       id="showextra-btn"></i>
+                                    <i class="fa fa-trash button-circle text-primary pointer p-8px"></i>
+                                </div>
+                            </div>
+                            <div class="form-row" id="product-details-extras">
+                                <div class="form-group col-md-4">
+                                    <label for="hsn">HSN</label>
+                                    <input type="number" class="form-control" id="hsn" placeholder="Enter HSN">
+                                    <span class="font-12">Don't know your HSN code?
+                                        <a class="no-text-decoration" href="https://cleartax.in/s/gst-hsn-lookup">Check here
+                                        </a>
+                                    </span>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="discount">Discount <small>(Optional)</small></label>
+                                    <input type="number" class="form-control" id="discount"
+                                           placeholder="Enter Tax Rate">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="product_category">Product Category</label>
+                                    <input type="text" class="form-control" id="product_category"
+                                           placeholder="Enter Tax Rate">
+                                </div>
+                            </div>
+                            <hr>
+
+                            <h6>Payments</h6>
+                            <div class="form-row">
+                                <div class="form-check-inline col-3 mr-0 pt-1">
+                                    <label class="form-check-label" for="cod">
+                                        <input type="radio" class="form-check-input" id="cod" name="payment_method"
+                                               value="Cash On Delivery" onclick="setTextCOD()" checked>Cash On Delivery
+                                    </label>
+                                </div>
+                                <div class="form-check-inline col-3 mr-0 pt-1">
+                                    <label class="form-check-label" for="prepaid">
+                                        <input type="radio" class="form-check-input" id="prepaid" name="payment_method"
+                                               value="Prepaid" onclick="setTextPrepaid()">Prepaid
+                                    </label>
+                                </div>
+                                <div class="form-check-inline col-3">
+                                    <label class="form-check-label font-bold">
+                                        Sub Total: <span class="font-20">&#x20B9; 0</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <hr>
+
+                            <div class="col-md-12 pl-0 mb-3" id="more-changes-section">
+                                <a id="more-charges-button">
+                                    <i class="fa fa-chevron-up button-circle text-primary pointer p-7px chevron"></i>
+                                    <small id="hide-more-charges" class="text-primary ml-3 pointer">Hide More
+                                        Charges</small>
+                                    <small id="show-more-charges" class="text-primary ml-3 pointer"
+                                           style="display:none">Show More Charges</small>
+                                </a>
+                            </div>
+
+                            <div id="more-charges">
+                                <div class="form-row">
+                                    <div class="form-check form-check-inline col-3 mr-0">
+                                        <input class="form-check-input" type="checkbox" id="shipping_chkbox"
+                                               value="option1" onclick="showShippingTextbox()">
+                                        <label class="form-check-label" for="shipping_chkbox">Shipping</label>
+                                    </div>
+                                    <div class="form-check form-check-inline col-3 mr-0">
+                                        <input class="form-check-input" type="checkbox" id="giftwrap_chkbox"
+                                               value="option1" onclick="showGiftwrapTextbox()">
+                                        <label class="form-check-label" for="giftwrap_chkbox">Giftwrap</label>
+                                    </div>
+                                    <div class="form-check form-check-inline col-3 mr-0">
+                                        <input class="form-check-input" type="checkbox" id="transaction_chkbox"
+                                               value="option1" onclick="showTransactionTextbox()">
+                                        <label class="form-check-label" for="transaction_chkbox">Transaction</label>
+                                    </div>
+                                    <div class="form-check form-check-inline col-3 mr-0">
+                                        <input class="form-check-input" type="checkbox" id="discounts_chkbox"
+                                               value="option1" onclick="showDiscountTextbox()">
+                                        <label class="form-check-label" for="discounts_chkbox">Discounts</label>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-2">
+                                    <div class="col-md-3">
+                                        <input type="number" class="form-control" id="shipping_charge"
+                                               style="display:none">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="number" class="form-control" id="giftwrap_charge"
+                                               style="display:none">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="number" class="form-control" id="transaction_charge"
+                                               style="display:none">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="number" class="form-control" id="extra_discount"
+                                               style="display:none">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-4">
+                                <div class="col-md-12">
+                                    <label class="form-check-label">
+                                        Total: <span class="font-20 font-bold">₹ 0</span>
+                                        (<label id="payment_method">Cash On Delivery</label>)
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button class="btn btn-primary mt-1 float-right px-4">Next</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--------------------------------------------------------------------------------------------------------->
+
+
+                <!------------------------------------------------- Step Three ------------------------------------------>
+                <div class="card">
+                    <div class="card-header" id="headingThree">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link text-dark no-text-decoration w-100 px-0 collapsed"
+                                    data-toggle="collapse"
+                                    data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                <span class="circle font-bold float-left">3</span>
+                                <span class="float-left font-bold ml-4 mt-3px">Pickup Address</span>
+                                <i class="fa fa-chevron-right chevron float-right mt-1"></i>
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6>Pickup Address</h6>
+                                    <span class="font-12">(Choose your pickup address from below)</span>
+                                </div>
+                                <div class="col-md-6">
+                                    <a class="no-text-decoration pointer">
+                                        <span class="float-right text-primary font-bold font-13 mt-1">Add Address</span>
+                                        <span class="circle float-right text-primary bg-white pl-5px mr-2 border-light-grey"><i
+                                                class="fa fa-plus"></i></span>
+                                    </a>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row mx-1">
+                                <div class="col-md-4 mb-2 border-right-5px-white">
+                                    <div class="row bg-primary border-radius-top py-3 pl-4">
+                                        <h6 class=" pt-1">Dipesh Parab</h6>
+                                    </div>
+                                    <div class="row p-3 border-radius-bottom border border-primary pickup-address-section">
+                                        <div class="font-13 font-bold font-secondary">
+                                            <p>A-23, XYZ Society, PQR Road, Colaba(W), Mumbai-400001</p>
+                                            <p>Mumbai </p>
+                                            <p>Maharashtra India</p>
+                                        </div>
+                                        <div class="py-2 mt-4">
+                                            <button class="btn btn-outline-primary px-3">Select</button>
+                                            <span class="address-line-circle text-primary ml-2">
+                                                <i class="fa fa-pencil font-13"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-2 border-right-5px-white">
+                                    <div class="row bg-primary border-radius-top py-3 pl-4">
+                                        <h6 class=" pt-1">Dipesh Parab</h6>
+                                    </div>
+                                    <div class="row p-3 border-radius-bottom border border-primary pickup-address-section">
+                                        <div class="font-13 font-bold font-secondary">
+                                            <p>A-23, XYZ Society, PQR Road, Colaba(W), Mumbai-400001</p>
+                                            <p>Mumbai </p>
+                                            <p>Maharashtra India</p>
+                                        </div>
+                                        <div class="py-2 mt-4">
+                                            <button class="btn btn-outline-primary px-3">Select</button>
+                                            <span class="address-line-circle text-primary ml-2">
+                                                <i class="fa fa-pencil font-13"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-2 border-right-5px-white">
+                                    <div class="row bg-primary border-radius-top py-3 pl-4">
+                                        <h6 class=" pt-1">Dipesh Parab</h6>
+                                    </div>
+                                    <div class="row p-3 border-radius-bottom border border-primary pickup-address-section">
+                                        <div class="font-13 font-bold font-secondary">
+                                            <p>A-23, XYZ Society, PQR Road, Colaba(W), Mumbai-400001</p>
+                                            <p>Mumbai </p>
+                                            <p>Maharashtra India</p>
+                                        </div>
+                                        <div class="py-2 mt-4">
+                                            <button class="btn btn-outline-primary px-3">Select</button>
+                                            <span class="address-line-circle text-primary ml-2">
+                                                <i class="fa fa-pencil font-13"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-2 border-right-5px-white">
+                                    <div class="row bg-primary border-radius-top py-3 pl-4">
+                                        <h6 class=" pt-1">Dipesh Parab</h6>
+                                    </div>
+                                    <div class="row p-3 border-radius-bottom border border-primary pickup-address-section">
+                                        <div class="font-13 font-bold font-secondary">
+                                            <p>A-23, XYZ Society, PQR Road, Colaba(W), Mumbai-400001</p>
+                                            <p>Mumbai </p>
+                                            <p>Maharashtra India</p>
+                                        </div>
+                                        <div class="py-2 mt-4">
+                                            <button class="btn btn-outline-primary px-3">Select</button>
+                                            <span class="address-line-circle text-primary ml-2">
+                                                <i class="fa fa-pencil font-13"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!----------------------------------------------------------------------------------------------------->
+
+
+                <!------------------------------------------------- Step Four ------------------------------------------>
+                <div class="card">
+                    <div class="card-header" id="headingFour">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link text-dark no-text-decoration w-100 px-0 collapsed"
+                                    data-toggle="collapse"
+                                    data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                <span class="circle font-bold float-left">4</span>
+                                <span class="float-left font-bold ml-4 mt-3px">Package Weight</span>
+                                <i class="fa fa-chevron-right chevron float-right mt-1"></i>
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="collapseFour" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                        <div class="card-body">
+                            <div class="form-row" id="package-details">
+                                <div class="form-group col-md-3">
+                                    <label for="package_weight">Weight</label>
+                                    <div class="input-group labelled-input">
+                                        <input type="number" class="form-control" id="package_weight" required>
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">KG</div>
+                                        </div>
+                                    </div>
+                                    <label class="font-11 text-secondary">(Max 3 digits after decimal place)</br>
+                                        Note: The minimum chargeable weight is 0.50 Kg</label>
+                                </div>
+
+                                <div class="form-group col-md-3">
+                                    <label for="package_length">Length</label>
+                                    <div class="input-group labelled-input">
+                                        <input type="number" class="form-control" id="package_length"
+                                               onblur="calc_volumetric_weight()" required>
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">CM</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-3">
+                                    <label for="package_width">Width</label>
+                                    <div class="input-group labelled-input">
+                                        <input type="number" class="form-control" id="package_width"
+                                               onblur="calc_volumetric_weight()" required>
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">CM</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-3">
+                                    <label for="package_height">Height</label>
+                                    <div class="input-group labelled-input">
+                                        <input type="number" class="form-control" id="package_height"
+                                               onblur="calc_volumetric_weight()" required>
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">CM</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <label>Volumetric Weight (Kg)</label>
+                                    <label id="volumetric_weight" class="font-bold"></label>
+                                    <label class="font-bold">Kg</label></br>
+                                    <label class="mt-2 font-bold">Package Details</label>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <select id="package_options" class="form-control">
+                                                <option value="None" selected>Select Package</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <small class="font-bold">OR</small>
+                                            <button class="btn btn-primary px-3 ml-3">Add Package</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button class="btn btn-primary mt-1 float-right px-4">Next</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--------------------------------------------------------------------------------------------------------->
+
+
+                <!------------------------------------------------- Step Five ------------------------------------------>
+                <div class="card">
+                    <div class="card-header" id="headingFive">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link text-dark no-text-decoration w-100 px-0 collapsed"
+                                    data-toggle="collapse"
+                                    data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                <span class="circle font-bold float-left">5</span>
+                                <span class="float-left font-bold ml-4 mt-3px">Other Details</span>
+                                <i class="fa fa-chevron-right chevron float-right mt-1"></i>
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="collapseFive" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                        <div class="card-body">
+                            <div class="form-row" id="other-details">
+                                <div class="form-group col-md-6">
+                                    <label for="reseller_name">Reseller Name(Optional)</label>
+                                    <i class="fa fa-info-circle font-12 ml-1" data-toggle="tooltip"
+                                       title="Name to be shown on the label"></i>
+                                    <input class="form-control" type="text" id="reseller_name"
+                                           placeholder="Enter Reseller Name">
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label for="eway_bill_number">Eway Bill Number(Optional)</label>
+                                    <i class="fa fa-info-circle font-12 ml-1" data-toggle="tooltip"
+                                       title="Only required for order value greater than ₹ 50,000"></i>
+                                    <input class="form-control" type="text" id="eway_bill_number"
+                                           placeholder="Enter Eway Bill Number">
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label for="gstin_number">GSTIN Number(Optional)</label>
+                                    <input class="form-control" type="text" id="gstin_number"
+                                           placeholder="Enter GSTIN Number">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--------------------------------------------------------------------------------------------------------->
+
+                <div class="mb-4">
+                    <input type="submit" class="btn btn-success float-right mt-2" value="Add Order"></input>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-md-3 help-text">
+        <h4>Add your Buyer Details</h4>
+        <p>While entering your buyer details, please make sure you are entering the correct phone number and email ID.
+            We will use this information in all future communication with your buyer.</p>
+
+        <h6 class="mt-4">Enter your buyer’s complete address</h6>
+        <p>Please enter the correct address of your buyer here.
+            Note: Mention the company name if it’s a B2B order.</p>
+
+        <h6 class="mt-4">Next, enter the billing address</h6>
+        <p>Please select the field ‘Billing Address is Same as Delivery Address’ if both addresses are the same.
+            You can enter a different billing address as well.
+            Review the information and click next to proceed.</p>
+        </p>
+    </div>
+</div>
+{% endblock %}

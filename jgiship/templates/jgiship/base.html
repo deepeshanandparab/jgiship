@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="" type="image/x-icon"/>
+    <link href="https://fonts.googleapis.com/css?family=Sonsie+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <meta charset="UTF-8">
+    <!-- Font Awesome -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    {% if title %}
+    <title>JustGetIt - {{title}}</title>
+    {% else %}
+    <title>JustGetIt</title>
+    {% endif %}
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/map.css' %}">
+</head>
+<body>
+<div class="container-fluid px-0">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#jgi-top-navbar"
+                aria-controls="jgi-top-navbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="#">
+            JustGetIt<p class="font-10">Shipping Management</p>
+        </a>
+
+        <div class="collapse navbar-collapse" id="jgi-top-navbar">
+            <ul class="navbar-nav mr-auto">
+            </ul>
+            User Logout
+        </div>
+    </nav>
+
+
+    <nav id="menu">
+        <ul class="parent-menu">
+            <li><a href="#"><span class="material-icons">dashboard</span><br>Dashboard</a>
+            </li>
+            <li><a href="{% url 'process-order' %}"><span class="material-icons">shopping_cart</span><br>Orders</a>
+                <ul>
+                    <li>
+                        <a href="{% url 'add-order' %}">
+                            <span class="material-icons mr-2">playlist_add</span>
+                            <span class="submenu-text">Add Order</span>
+                        </a>
+                    </li>
+                    <li><a href="{% url 'process-order' %}">
+                        <span class="material-icons mr-2">settings_applications</span>
+                        <span class="submenu-text">Process Orders</span>
+                    </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'generate-pickup' %}">
+                            <span class="material-icons mr-2">inbox</span>
+                            <span class="submenu-text">Generate Pickup</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'manifest' %}">
+                            <span class="material-icons mr-2">assignment</span>
+                            <span class="submenu-text">Download Manifest</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'orders' %}">
+                            <span class="material-icons mr-2">list</span>
+                            <span class="submenu-text">All Orders</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span class="material-icons mr-2">local_shipping</span>
+                            <span class="submenu-text">Create Quick Shipment</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li><a href="#"><span class="material-icons">replay</span><br>Returns</a>
+                <ul>
+                    <li><a href="#">item</a></li>
+                    <li><a href="#">item</a></li>
+                    <li><a href="#">item</a></li>
+                    <li><a href="#">item</a></li>
+                </ul>
+            </li>
+            <li><a href="#"><span class="material-icons">local_shipping</span><br>Shipments</a>
+                <ul>
+                    <li><a href="#">item</a></li>
+                    <li><a href="#">item</a></li>
+                    <li><a href="#">item</a></li>
+                    <li><a href="#">item</a></li>
+                </ul>
+            </li>
+            <li><a href="#"><span class="material-icons">people</span><br>Customers</a>
+                <ul>
+                    <li><a href="#">item</a></li>
+                    <li><a href="#">item</a></li>
+                    <li><a href="#">item</a></li>
+                    <li><a href="#">item</a></li>
+                </ul>
+            </li>
+            <li><a href="#"><span class="material-icons">receipt_long</span><br>Billing</a>
+                <ul>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Forum</a></li>
+                    <li><a href="#">Deliveries</a></li>
+                    <li><a href="#">T&C</a></li>
+                </ul>
+            </li>
+            <li><a href="#"><span class="material-icons">construction</span><br>Tools</a>
+                <ul>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Forum</a></li>
+                    <li><a href="#">Deliveries</a></li>
+                    <li><a href="#">T&C</a></li>
+                </ul>
+            </li>
+            <li><a href="#"><span class="material-icons">reorder</span><br>Channels</a>
+                <ul>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Forum</a></li>
+                    <li><a href="#">Deliveries</a></li>
+                    <li><a href="#">T&C</a></li>
+                </ul>
+            </li>
+            <li><a href="#"><span class="material-icons">settings</span><br>Settings</a>
+                <ul>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Forum</a></li>
+                    <li><a href="#">Deliveries</a></li>
+                    <li><a href="#">T&C</a></li>
+                </ul>
+            </li>
+            <li><a href="#"><span class="material-icons">feedback</span><br>Post Ship</a>
+                <ul>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Forum</a></li>
+                    <li><a href="#">Deliveries</a></li>
+                    <li><a href="#">T&C</a></li>
+                </ul>
+            </li>
+            <li><a href="#"><span class="material-icons">fingerprint</span><br>KYC</a>
+                <ul>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Forum</a></li>
+                    <li><a href="#">Deliveries</a></li>
+                    <li><a href="#">T&C</a></li>
+                </ul>
+            </li>
+            <li><a href="#"><span class="material-icons">api</span><br>API</a>
+                <ul>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Forum</a></li>
+                    <li><a href="#">Deliveries</a></li>
+                    <li><a href="#">T&C</a></li>
+                </ul>
+            </li>
+            <li><a href="#"><span class="material-icons">support_agent</span><br>Support</a>
+                <ul>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Forum</a></li>
+                    <li><a href="#">Deliveries</a></li>
+                    <li><a href="#">T&C</a></li>
+                </ul>
+            </li>
+        </ul>
+
+        <div class="orders-top-nav">
+            <ul class="nav nav-tabs">
+                <h4 class="mx-4 mt-1">Orders</h4>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'process-order' %}">Processing
+                        <span class="badge bg-success text-white badge-pill ml-1 p-1">0</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'generate-pickup' %}">Ready To Ship
+                        <span class="badge bg-success text-white badge-pill ml-1 p-1">10</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'manifest' %}">Manifest
+                        <span class="badge bg-success text-white badge-pill ml-1 p-1">100</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Returns
+                        <span class="badge bg-success text-white badge-pill ml-1 p-1">1000</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'orders' %}">All Orders
+                        <span class="badge bg-success text-white badge-pill ml-1 p-1">1000</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="orders-content-section">
+            {% block content %} {% endblock %}
+        </div>
+    </nav>
+</div>
+
+<!--------------------------------------- Scripts --------------------------------------->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initAutocomplete&libraries=places&v=weekly"
+        defer></script>
+
+
+<script src="{% static 'js/add_order.js' %}"></script>
+<script src="{% static 'js/map.js' %}"></script>
+<!--------------------------------------------------------------------------------------->
+
+</body>
+</html>
