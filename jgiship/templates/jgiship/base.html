@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="" type="image/x-icon"/>
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon"/>
     <link href="https://fonts.googleapis.com/css?family=Sonsie+One&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <meta charset="UTF-8">
@@ -19,6 +19,7 @@
     {% endif %}
 
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/loader.css' %}">
     <link rel="stylesheet" href="{% static 'css/map.css' %}">
 </head>
 <body>
@@ -35,7 +36,7 @@
         <div class="collapse navbar-collapse" id="jgi-top-navbar">
             <ul class="navbar-nav mr-auto">
             </ul>
-            User Logout
+            <span class="circle text-uppercase pl-2 font-bold">{{request.user|make_list|first}}</span>{{request.user.username}} | Logout
         </div>
     </nav>
 
@@ -214,12 +215,10 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initAutocomplete&libraries=places&v=weekly"
-        defer></script>
 
 
 <script src="{% static 'js/add_order.js' %}"></script>
+<script src="{% static 'js/add_order_form_submit.js' %}"></script>
 <script src="{% static 'js/map.js' %}"></script>
 <!--------------------------------------------------------------------------------------->
 

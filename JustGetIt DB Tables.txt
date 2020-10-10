@@ -1,0 +1,98 @@
+Table
+
+- Buyer
+	id(PK)
+	user(FK=User)
+	buyer_name
+	phone_number
+	alternate_phone_number
+	email_id
+	address_line1
+	address_line2
+	pincode
+	city
+	state
+	country
+	company_name
+	same_billing_address
+	billing_buyer_name
+	billing_phone_number
+	billing_email_id
+	billing_address_line1
+	billing_address_line2
+	billing_pincode
+	billing_city
+	billing_state
+	billing_country
+
+
+- Order
+	id(PK)
+	buyer(FK=Buyer)
+	order_date
+	order_channel
+
+
+- Product
+	id(PK)
+	order(FK=Order)
+	product_name
+	sku
+	quantity
+	unit_price
+	tax_rate
+	hsn
+	discount
+	product_category
+	payment_method
+	sub_total
+	shipping_charge
+	giftwrap_charge
+	transaction_charge
+	discount
+	total	
+
+- Pickup Address
+	id(PK)
+	user(FK=User)
+	address_nickname
+	contact_name
+	phone
+	address_line1
+	address_line2
+	pincode
+	city
+	state
+	email
+	is_supplier_address
+
+- Package Metrics
+	id(PK)
+	order(FK=Order)
+	weight
+	length
+	width
+	height
+	volumetric_weight
+
+- Package Details
+	id(PK)
+	package_name
+	package_type
+	package_length
+	package_height
+	package_sku
+
+- Package Images
+	id(PK)
+	package(FK=Package Details)
+	image
+	uploaded_on
+	
+
+- Other Details 
+	id(PK)
+	order(FK=Order)
+	reseller_name
+	eway_bill_number
+	gstin_number

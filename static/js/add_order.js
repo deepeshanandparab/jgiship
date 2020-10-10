@@ -1,6 +1,6 @@
 function showBillingForm() {
-  var checkBox = document.getElementById("billing-address_checkbox");
-  var billing_form = document.getElementById("billing-address-form");
+  var checkBox = document.getElementById("billing_address_checkbox");
+  var billing_form = document.getElementById("billing_address_form");
 
   if (checkBox.checked == true){
     billing_form.style.display = "none";
@@ -236,3 +236,4 @@ function setTextPrepaid(){
 $(document).ready(function(){
   $('[data-toggle="tooltip"]').tooltip();
 });
+

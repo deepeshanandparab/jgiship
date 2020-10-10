@@ -116,11 +116,11 @@ p, ul, li, div, nav{
     float: left!important;
 }
 
-.buyer-form label{
+#add_order_page label{
     font-size: 13px;
 }
 
-.buyer-form input[type=text], input[type=password], input[type=email], input[type=number], input[type=date], select, button{
+#add_order_page input[type=text], input[type=password], input[type=email], input[type=number], input[type=date], select, button{
     border-radius: 30px!important;
     font-size: 13px!important;
 }
@@ -130,7 +130,7 @@ p, ul, li, div, nav{
     font-size: 13px!important;
 }
 
-input[type=number], input[type=date]{
+#add_order_page input[type=number], input[type=date]{
     font-size: 13px!important;
 }
 
@@ -267,4 +267,16 @@ select {
 
 .mt-3px{
     margin-top: 3px!important;
+}
+
+.pt-0px{
+    padding-top: 0px!important;
+}
+
+.blur-background{
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-backdrop{
+    height: 0px!important;
 }
