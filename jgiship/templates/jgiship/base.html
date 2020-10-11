@@ -29,8 +29,12 @@
                 aria-controls="jgi-top-navbar" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand" href="#">
-            JustGetIt<p class="font-10">Shipping Management</p>
+        <div class="">
+            <img src="{% static 'images/jgi_logo.png' %}" class="img img-responsive" height="50px">
+        </div>
+        <a class="navbar-brand" href="{% url 'process-order' %}">
+            <p class="font-bold">JustGetIt</p>
+            <p class="font-10">Shipping Management</p>
         </a>
 
         <div class="collapse navbar-collapse" id="jgi-top-navbar">

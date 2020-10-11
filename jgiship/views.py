@@ -2,11 +2,12 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from datetime import datetime
 
-from jgiship.models import Order, Buyer
+from jgiship.models import Buyer, PickupAddress
 from .states import STATES
 
 def add_order(request):
-    context = {'title': 'Add Order', 'indian_states': STATES}
+    Address_list = PickupAddress.objects.all()
+    context = {'title': 'Add Order', 'indian_states': STATES, 'Address_list': Address_list}
     return render(request, 'jgiship/add_order.html', context)
 
 
@@ -58,6 +59,36 @@ def create_order(request):
             billing_city = billing_city,
             billing_state = billing_state,
             billing_country = billing_country
+        )
+    return HttpResponse('')
+
+
+def add_pickup_address(request):
+    if request.method == 'POST':
+        user = request.user
+        address_nickname = request.POST['address_nickname']
+        contact_name = request.POST['contact_name']
+        phone_number = request.POST['phone']
+        address_line1 = request.POST['address_line1']
+        address_line2 = request.POST['address_line2']
+        pincode = request.POST['address_pincode']
+        city = request.POST['address_city']
+        state = request.POST['address_state']
+        email = request.POST['address_email']
+        is_supplier_address = request.POST['supplier_address']
+
+        PickupAddress.objects.create(
+            user = user,
+            address_nickname = address_nickname,
+            contact_name = contact_name,
+            phone_number = phone_number,
+            address_line1 = address_line1,
+            address_line2 = address_line2,
+            pincode = pincode,
+            city = city,
+            state = state,
+            email = email,
+            is_supplier_address = is_supplier_address
         )
     return HttpResponse('')
 

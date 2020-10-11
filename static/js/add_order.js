@@ -237,3 +237,61 @@ $(document).ready(function(){
   $('[data-toggle="tooltip"]').tooltip();
 });
 
+
+
+$(document).ready(function(){
+    quantity = $('#quantity').val();
+    unit_price = $('#unit_price').val();
+    tax_rate = $('#tax_rate').val();
+    discount = $('#discount').val();
+    sub_total = $('#sub_total').val();
+
+    $("#discount").blur(function(){
+        if(quantity!=null){
+            if(unit_price!=null){
+                if(tax_rate!=null){
+                    if(discount!=null){
+                            sub_total = (quantity*unit_price)+(tax_rate/100)-(discount/100);
+                            console.log('quantity', quantity);
+                            console.log('unit_price', unit_price);
+                            console.log('tax_rate', tax_rate);
+                            console.log('discount', discount);
+                            console.log('sub_total', sub_total);
+                        }
+                    else{
+                            sub_total = (quantity*unit_price)+(tax_rate/100);
+                            console.log('quantity', quantity);
+                            console.log('unit_price', unit_price);
+                            console.log('tax_rate', tax_rate);
+                            console.log('discount', discount);
+                            console.log('sub_total', sub_total);
+                        }
+                    }
+                else{
+                    sub_total = (quantity*unit_price);
+                    console.log('quantity', quantity);
+                            console.log('unit_price', unit_price);
+                            console.log('tax_rate', tax_rate);
+                            console.log('discount', discount);
+                            console.log('sub_total', sub_total);
+                 }
+                }
+            else{
+                sub_total = 0;
+                console.log('quantity', quantity);
+                            console.log('unit_price', unit_price);
+                            console.log('tax_rate', tax_rate);
+                            console.log('discount', discount);
+                            console.log('sub_total', sub_total);
+            }
+        }
+        else{
+                sub_total = 0;
+                console.log('quantity', quantity);
+                            console.log('unit_price', unit_price);
+                            console.log('tax_rate', tax_rate);
+                            console.log('discount', discount);
+                            console.log('sub_total', sub_total);
+            }
+        });
+});

@@ -38,6 +38,8 @@ $(document).ready(function(){
                         $('.loader').hide();
                         $('#panel1_check').show();
                         $('#panel1').hide();
+                        $("#headingOne").removeClass('bg-success');
+                        $("#headingTwo").addClass('bg-success');
                         $('#collapseTwo_btn').prop('disabled', false);
                         $('#collapseOne_btn').attr('aria-expanded', false);
                         $('#collapseOne').removeClass('show');
@@ -79,6 +81,8 @@ $(document).ready(function(){
                         $('.loader').hide();
                         $('#panel1_check').show();
                         $('#panel1').hide();
+                        $("#headingOne").removeClass('bg-success');
+                        $("#headingTwo").addClass('bg-success');
                         $('#collapseTwo_btn').prop('disabled', false);
                         $('#collapseOne_btn').attr('aria-expanded', false);
                         $('#collapseOne').removeClass('show');
@@ -87,5 +91,47 @@ $(document).ready(function(){
                     }
                 });
          }
+         });
+});
+
+
+
+$(document).ready(function(){
+         $('#add_address_form').submit(function(e){
+         e.preventDefault();
+         supplier_address_status = $('#supplier_address').is(':checked') ? 'True' : 'False';
+         $('.loader-container').show();
+         $('.loader').show();
+         $.ajax({
+                type:'POST',
+                url: domain_name + 'pickup-address/create/',
+                data:{
+                    address_nickname:$('#address_nickname').val(),
+                    contact_name:$('#contact_name').val(),
+                    phone:$('#phone').val(),
+                    address_line1:$('#address_line1').val(),
+                    address_line2:$('#address_line2').val(),
+                    address_pincode:$('#address_pincode').val(),
+                    address_city:$('#address_city').val(),
+                    address_state:$('#address_state').val(),
+                    address_email:$('#address_email').val(),
+                    supplier_address:supplier_address_status,
+                    csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+                    },
+                success:function(){
+                        $('.loader-container').hide();
+                        $('.loader').hide();
+                        $('#add_Address_Modal').modal('hide');
+                        $('#add_address_form')[0].reset();
+                        $("#collapseThree").load(location.href + " #pickup_address_card");
+                        $('#panel3_check').show();
+                        $('#panel3').hide();
+//                        $('#collapseFour_btn').prop('disabled', false);
+//                        $('#collapseThree_btn').attr('aria-expanded', false);
+//                        $('#collapseThree').removeClass('show');
+//                        $('#collapseFour_btn').attr('aria-expanded', true);
+//                        $('#collapseFour').addClass('show');
+                    }
+                });
          });
 });
