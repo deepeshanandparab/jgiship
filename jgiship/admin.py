@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Buyer, Order, Product, PickupAddress, PackageDetails, PackageMetrics, PackageImages, OtherDetails
+from .models import Buyer, Order, Product, PickupAddress, PackageDetails, PackageMetrics, PackageImages, OtherDetails, SelectedAddress
 
 admin.site.register(Buyer)
 admin.site.register(Order)
@@ -9,3 +9,4 @@ admin.site.register(PackageDetails)
 admin.site.register(PackageMetrics)
 admin.site.register(PackageImages)
 admin.site.register(OtherDetails)
+admin.site.register(SelectedAddress)

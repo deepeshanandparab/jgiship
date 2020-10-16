@@ -4,6 +4,16 @@
 {% block content %}
 <div class="row">
     <div class="col-md-9" id="add_order_page">
+        <div class="col-md-12 text-center" id="message-container">
+            {% for message in messages %}
+            <div class="text-center alert {% if message.tags == 'error' %} alert-danger {% else %} alert-{{message.tags}} {% endif %}"
+                 role="alert">
+                <i class="fa  {% if message.tags == 'error' %} fa-close {% else %} fa-check {% endif %}"></i> {{ message
+                }}
+            </div>
+            {% endfor %}
+        </div>
+
         <div id="accordion">
             <!------------------------------------------------- Step One --------------------------------------------->
             <div class="card">
@@ -13,7 +23,8 @@
                                 data-target="#collapseOne" aria-expanded="true" id="collapseOne_btn"
                                 aria-controls="collapseOne">
                             <span class="circle font-bold float-left" id="panel1">1</span>
-                            <span class="circle font-bold float-left bg-success" id="panel1_check" style="display: none">
+                            <span class="circle font-bold float-left bg-success" id="panel1_check"
+                                  style="display: none">
                                 <i class="fa fa-check"></i>
                             </span>
                             <span class="float-left font-bold ml-4 mt-3px">Buyer Details</span>
@@ -28,23 +39,25 @@
                     <div class="card-body">
                         <h6>Buyer Details</h6>
                         <!-----------------------------------Delivery Address Form------------------------------->
-                        <form class="buyer-form" id="buyer-details-form">
-                            {% csrf_token %}
+                        <form id="buyer_form">
                             <div class="form-row">
                                 <div class="form-group col-md-3">
-                                    <label for="buyer_name">Buyer Name</label>
+                                    <label for="buyer_name">Buyer Name <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="buyer_name"
-                                           placeholder="Enter Buyer Name"
-                                           required>
+                                           placeholder="Enter Buyer Name" required>
+                                    <label id="buyer_name_error" class="text-danger font-12">Please enter a buyer
+                                        name</label>
                                 </div>
                                 <div class="form-group col-md-3">
-                                    <label for="phone_number">Phone Number</label>
+                                    <label for="phone_number">Phone Number <span class="text-danger">*</span></label>
                                     <div class="input-group labelled-input">
                                         <div class="input-group-prepend">
                                             <div class="input-group-text">+91</div>
                                         </div>
                                         <input type="number" class="form-control" id="phone_number"
                                                placeholder="Enter Phone Number" required>
+                                        <label id="buyer_phone_number_error" class="text-danger font-12">Please enter a
+                                            phone number</label>
                                     </div>
                                 </div>
                                 <div class="form-group col-md-3">
@@ -58,46 +71,55 @@
                                     </div>
                                 </div>
                                 <div class="form-group col-md-3">
-                                    <label for="buyer_email">Email Id</label>
+                                    <label for="buyer_email">Email Id <span class="text-danger">*</span></label>
                                     <input type="email" class="form-control" id="buyer_email"
-                                           placeholder="Enter Email Id"
-                                           required>
+                                           placeholder="Enter Email Id" required>
+                                    <label id="buyer_email_id_error" class="text-danger font-12">Please enter an email
+                                        id</label>
                                 </div>
                             </div>
                             <hr>
                             <h6>Buyer Address</h6>
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label for="address1">Address Line 1</label>
-                                    <input type="text" class="form-control" id="address1" placeholder="Enter Address"
+                                    <label for="address1">Address Line 1 <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="address1" placeholder="Flat/House No."
                                            required>
+                                    <label id="buyer_address_error" class="text-danger font-12">Please enter an
+                                        address</label>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="address2">Address Line 2</label>
-                                    <input type="text" class="form-control" id="address2" placeholder="Enter Address">
+                                    <input type="text" class="form-control" id="address2"
+                                           placeholder="Street, Locality/Area">
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-3">
-                                    <label for="pincode">Pincode</label>
+                                    <label for="pincode">Pincode <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="pincode" placeholder="Enter Pincode"
                                            required>
+                                    <label id="buyer_pincode_error" class="text-danger font-12">Please enter a
+                                        pincode</label>
                                 </div>
                                 <div class="form-group col-md-3">
-                                    <label for="city">City</label>
+                                    <label for="city">City <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="city" placeholder="Enter City" required>
+                                    <label id="buyer_city_error" class="text-danger font-12">Please enter a city</label>
                                 </div>
                                 <div class="form-group col-md-3">
-                                    <label for="state">State</label>
+                                    <label for="state">State <span class="text-danger">*</span></label>
                                     <select id="state" class="form-control" required>
                                         <option value="None" selected>Select State.</option>
                                         {% for key in indian_states %}
                                         <option value="{{key}}">{{key|title}}</option>
                                         {% endfor %}
                                     </select>
+                                    <label id="buyer_state_error" class="text-danger font-12">Please enter a
+                                        state</label>
                                 </div>
                                 <div class="form-group col-md-3">
-                                    <label for="country">Country</label>
+                                    <label for="country">Country <span class="text-danger">*</span></label>
                                     {% get_countries as countries %}
                                     <select id="country" class="form-control" required>
                                         <option value="" selected>Select Country</option>
@@ -105,6 +127,8 @@
                                         <option value="{{country.code}}">{{country.name}}</option>
                                         {% endfor %}
                                     </select>
+                                    <label id="buyer_country_error" class="text-danger font-12">Please enter a
+                                        country</label>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="company">Company Name <small>(Optional)</small></label>
@@ -112,27 +136,6 @@
                                            placeholder="Enter Company Name">
                                 </div>
                             </div>
-                            <!-------------------------------------------------------------------------------------------->
-
-
-                            <!--                            <div class="form-group">-->
-                            <!--                                <div class="form-check">-->
-                            <!--                                    <input class="form-check-input" type="checkbox" id="hyperlocal-shipment"-->
-                            <!--                                           onclick="showLocationMap()">-->
-                            <!--                                    <label class="form-check-label" for="hyperlocal-shipment">-->
-                            <!--                                        Select For Hyperlocal Shipment-->
-                            <!--                                    </label>-->
-
-                            <!--                                    <div id="location-map" style="display: none">-->
-                            <!--                                        <input class="form-control my-2" type="text" id="map-location-text">-->
-                            <!--                                        <div class="map-responsive">-->
-                            <!--                                            <iframe src="https://maps.google.com/maps?q=AthletixCricketAcademy&t=k&z=13&ie=UTF8&iwloc=&output=embed"-->
-                            <!--                                                    height="400" class="col-12 px-0" frameborder="0" style="border:0"-->
-                            <!--                                                    allowfullscreen></iframe>-->
-                            <!--                                        </div>-->
-                            <!--                                    </div>-->
-                            <!--                                </div>-->
-                            <!--                            </div>-->
                             <div class="form-group">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="billing_address_checkbox"
@@ -216,7 +219,8 @@
                             <!-------------------------------------------------------------------------------------------->
                             <div class="row">
                                 <div class="col-md-12">
-                                    <button type="submit" class="btn btn-primary mt-1 float-right px-4">Next</button>
+                                    <button id="buyer_details_btn" class="btn btn-primary mt-1 float-right px-4">Next
+                                    </button>
                                 </div>
                             </div>
                         </form>
@@ -232,194 +236,223 @@
                     <h5 class="mb-0">
                         <button class="btn btn-link text-dark no-text-decoration w-100 px-0 collapsed"
                                 data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false"
-                                aria-controls="collapseTwo" id="collapseTwo_btn">
-                            <span class="circle font-bold float-left">2</span>
+                                aria-controls="collapseTwo" id="collapseTwo_btn" disabled>
+                            <span class="circle font-bold float-left" id="panel2">2</span>
+                            <span class="circle font-bold float-left bg-success" id="panel2_check"
+                                  style="display: none">
+                                <i class="fa fa-check"></i>
+                            </span>
                             <span class="float-left font-bold ml-4 mt-3px">Order Details</span>
                             <i class="fa fa-chevron-right chevron float-right mt-1"></i>
                         </button>
                     </h5>
                 </div>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                    <div class="loader" style="display:none"></div>
+                    <div class="loader-container" style="display:none"></div>
                     <div class="card-body">
                         <h6>Order Details</h6>
                         <!-----------------------------------Delivery Address Form------------------------------->
-                        <div class="form-row">
-                            <div class="form-group col-md-4">
-                                <label for="order_id">Order Id</label>
-                                <input type="number" class="form-control" id="order_id"
-                                       placeholder="Order Id"
-                                       required>
-                                <button class="btn btn-primary mt-1 btn-sm" onclick="generate_order_id()">Generate
-                                </button>
+                        <form id="order_form">
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <label for="order_id">Order Id <span class="text-danger">*</span></label>
+                                    <label id="order_id_label"></label>
+                                    <input type="number" class="form-control" id="order_id" placeholder="Order Id"
+                                           required>
+                                    <a class="btn btn-primary mt-1 btn-sm pointer px-3 custom-button"
+                                       onclick="generate_order_id()">Generate</a>
+                                    <label id="order_id_error" class="text-danger font-12">Please generate order
+                                        id</label>
+                                </div>
+                                <div class="form-group col-md-4" id="datePicker">
+                                    <label for="order_date">Order Date</label>
+                                    <input type="date" class="form-control" id="order_date" required>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="order_channel">Order Channel <span class="text-danger">*</span></label>
+                                    <select id="order_channel" class="form-control" required>
+                                        <option value="" selected>Select Channel</option>
+                                        <option value="custom">Custom</option>
+                                        <option value="justgetit">JustGetIt</option>
+                                    </select>
+                                    <label id="order_channel_error" class="text-danger font-12">Please select order
+                                        channel</label>
+                                </div>
                             </div>
-                            <div class="form-group col-md-4" id="datePicker">
-                                <label for="order_date">Order Date</label>
-                                <input type="date" class="form-control" id="order_date" required>
+                            <hr>
+                            <h6>Product Details</h6>
+                            <div class="form-row">
+                                <div class="form-group col-md-2">
+                                    <label for="product_name">Product Name <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="product_name"
+                                           placeholder="Enter Product Name" required>
+                                    <label id="product_name_error" class="text-danger font-12">Please enter a product
+                                        name</label>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label for="sku">SKU</label>
+                                    <input type="text" class="form-control" id="sku" placeholder="Enter SKU">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label for="quantity">Quantity <span class="text-danger">*</span></label>
+                                    <input type="number" class="form-control" id="quantity" placeholder="Enter Quantity"
+                                           required>
+                                    <label id="quantity_error" class="text-danger font-12">Please enter a
+                                        quantity</label>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label for="unit_price">Unit Price <span class="text-danger">*</span></label>
+                                    <input type="number" class="form-control" id="unit_price"
+                                           placeholder="Enter Unit Price" required>
+                                    <label id="unit_price_error" class="text-danger font-12">Please enter a unit
+                                        price</label>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label for="tax_rate">Tax Rate <small>(Optional)</small></label>
+                                    <input type="number" class="form-control" id="tax_rate"
+                                           placeholder="Enter Tax Rate">
+                                </div>
+                                <div class="col-md-2 text-center pt-5per" id="product-details-buttons">
+                                    <i class="fa fa-chevron-up button-circle text-primary pointer p-7px chevron"
+                                       id="showextra-btn"></i>
+                                    <i class="fa fa-trash button-circle text-primary pointer p-8px"></i>
+                                </div>
                             </div>
-                            <div class="form-group col-md-4">
-                                <label for="order_channel">Order Channel</label>
-                                <select id="order_channel" class="form-control">
-                                    <option value="None" selected>Select Channel</option>
-                                    <option value="custom">Custom</option>
-                                    <option value="justgetit">JustGetIt</option>
-                                </select>
-                            </div>
-                        </div>
-                        <hr>
-                        <h6>Product Details</h6>
-                        <div class="form-row">
-                            <div class="form-group col-md-2">
-                                <label for="product_name">Product Name</label>
-                                <input type="text" class="form-control" id="product_name"
-                                       placeholder="Enter Product Name"
-                                       required>
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label for="sku">SKU</label>
-                                <input type="text" class="form-control" id="sku" placeholder="Enter SKU" required>
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label for="quantity">Quantity</label>
-                                <input type="number" class="form-control" id="quantity" placeholder="Enter Quantity"
-                                       required>
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label for="unit_price">Unit Price</label>
-                                <input type="number" class="form-control" id="unit_price"
-                                       placeholder="Enter Unit Price" required>
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label for="tax_rate">Tax Rate <small>(Optional)</small></label>
-                                <input type="number" class="form-control" id="tax_rate"
-                                       placeholder="Enter Tax Rate">
-                            </div>
-                            <div class="col-md-2 text-center pt-5per" id="product-details-buttons">
-                                <i class="fa fa-chevron-up button-circle text-primary pointer p-7px chevron"
-                                   id="showextra-btn"></i>
-                                <i class="fa fa-trash button-circle text-primary pointer p-8px"></i>
-                            </div>
-                        </div>
-                        <div class="form-row" id="product-details-extras">
-                            <div class="form-group col-md-4">
-                                <label for="hsn">HSN</label>
-                                <input type="number" class="form-control" id="hsn" placeholder="Enter HSN">
-                                <span class="font-12">Don't know your HSN code?
+                            <div class="form-row" id="product-details-extras">
+                                <div class="form-group col-md-4">
+                                    <label for="hsn">HSN</label>
+                                    <input type="number" class="form-control" id="hsn" placeholder="Enter HSN">
+                                    <span class="font-12">Don't know your HSN code?
                                         <a class="no-text-decoration" href="https://cleartax.in/s/gst-hsn-lookup">Check here
                                         </a>
                                     </span>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="discount">Discount <small>(Optional)</small></label>
+                                    <input type="number" class="form-control" id="discount"
+                                           placeholder="Enter Tax Rate">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="product_category">Product Category <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="product_category"
+                                           placeholder="Enter Product Category" required>
+                                    <label id="product_category_error" class="text-danger font-12">Please enter a
+                                        product category</label>
+                                </div>
                             </div>
-                            <div class="form-group col-md-3">
-                                <label for="discount">Discount <small>(Optional)</small></label>
-                                <input type="number" class="form-control" id="discount"
-                                       placeholder="Enter Tax Rate">
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label for="product_category">Product Category</label>
-                                <input type="text" class="form-control" id="product_category"
-                                       placeholder="Enter Product Category">
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <a class="no-text-decoration pointer">
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <a class="no-text-decoration pointer">
                                     <span class="circle text-primary bg-white pl-5px mr-2 border-light-grey pt-0px">
                                         <i class="fa fa-plus"></i>
                                     </span>
-                                    <span class="text-primary font-bold font-13 mt-1">Add Another Product</span>
+                                        <span class="text-primary font-bold font-13 mt-1">Add Another Product</span>
+                                    </a>
+                                </div>
+                            </div>
+                            <hr>
+
+                            <h6>Payments</h6>
+                            <div class="form-row">
+                                <div class="form-check-inline col-3 mr-0 pt-1">
+                                    <label class="form-check-label" for="cod">
+                                        <input type="radio" class="form-check-input" id="cod" name="payment_method"
+                                               value="Cash On Delivery" onclick="setTextCOD()" checked>Cash On Delivery
+                                    </label>
+                                </div>
+                                <div class="form-check-inline col-3 mr-0 pt-1">
+                                    <label class="form-check-label" for="prepaid">
+                                        <input type="radio" class="form-check-input" id="prepaid" name="payment_method"
+                                               value="Prepaid" onclick="setTextPrepaid()">Prepaid
+                                    </label>
+                                </div>
+                                <div class="form-check-inline col-5">
+                                    <label class="form-check-label font-bold">Sub Total: &#x20B9;</label>
+                                    <label id="sub_total_label"
+                                           class="form-check-label font-bold font-20 ml-2">0</label>
+                                    <input type="number" class="form-control" id="sub_total"
+                                           placeholder="Subtotal value" hidden>
+                                </div>
+                            </div>
+                            <hr>
+
+                            <div class="col-md-12 pl-0 mb-3" id="more-changes-section">
+                                <a id="more-charges-button">
+                                    <i class="fa fa-chevron-up button-circle text-primary pointer p-7px chevron"></i>
+                                    <small id="hide-more-charges" class="text-primary ml-3 pointer">Hide More
+                                        Charges</small>
+                                    <small id="show-more-charges" class="text-primary ml-3 pointer"
+                                           style="display:none">Show More Charges</small>
                                 </a>
                             </div>
-                        </div>
-                        <hr>
 
-                        <h6>Payments</h6>
-                        <div class="form-row">
-                            <div class="form-check-inline col-3 mr-0 pt-1">
-                                <label class="form-check-label" for="cod">
-                                    <input type="radio" class="form-check-input" id="cod" name="payment_method"
-                                           value="Cash On Delivery" onclick="setTextCOD()" checked>Cash On Delivery
-                                </label>
-                            </div>
-                            <div class="form-check-inline col-3 mr-0 pt-1">
-                                <label class="form-check-label" for="prepaid">
-                                    <input type="radio" class="form-check-input" id="prepaid" name="payment_method"
-                                           value="Prepaid" onclick="setTextPrepaid()">Prepaid
-                                </label>
-                            </div>
-                            <div class="form-check-inline col-5">
-                                <label class="form-check-label font-bold">Sub Total: &#x20B9;</label>
-                                <label id="sub_total_label" class="form-check-label font-bold font-20 ml-2">0</label>
-                                <input type="number" class="form-control" id="sub_total">
-                            </div>
-                        </div>
-                        <hr>
+                            <div id="more-charges">
+                                <div class="form-row">
+                                    <div class="form-check form-check-inline col-3 mr-0">
+                                        <input class="form-check-input" type="checkbox" id="shipping_chkbox"
+                                               value="option1" onclick="showShippingTextbox()">
+                                        <label class="form-check-label" for="shipping_chkbox">Shipping</label>
+                                    </div>
+                                    <div class="form-check form-check-inline col-3 mr-0">
+                                        <input class="form-check-input" type="checkbox" id="giftwrap_chkbox"
+                                               value="option1" onclick="showGiftwrapTextbox()">
+                                        <label class="form-check-label" for="giftwrap_chkbox">Giftwrap</label>
+                                    </div>
+                                    <div class="form-check form-check-inline col-3 mr-0">
+                                        <input class="form-check-input" type="checkbox" id="transaction_chkbox"
+                                               value="option1" onclick="showTransactionTextbox()">
+                                        <label class="form-check-label" for="transaction_chkbox">Transaction</label>
+                                    </div>
+                                    <div class="form-check form-check-inline col-3 mr-0">
+                                        <input class="form-check-input" type="checkbox" id="discounts_chkbox"
+                                               value="option1" onclick="showDiscountTextbox()">
+                                        <label class="form-check-label" for="discounts_chkbox">Discounts</label>
+                                    </div>
+                                </div>
 
-                        <div class="col-md-12 pl-0 mb-3" id="more-changes-section">
-                            <a id="more-charges-button">
-                                <i class="fa fa-chevron-up button-circle text-primary pointer p-7px chevron"></i>
-                                <small id="hide-more-charges" class="text-primary ml-3 pointer">Hide More
-                                    Charges</small>
-                                <small id="show-more-charges" class="text-primary ml-3 pointer"
-                                       style="display:none">Show More Charges</small>
-                            </a>
-                        </div>
-
-                        <div id="more-charges">
-                            <div class="form-row">
-                                <div class="form-check form-check-inline col-3 mr-0">
-                                    <input class="form-check-input" type="checkbox" id="shipping_chkbox"
-                                           value="option1" onclick="showShippingTextbox()">
-                                    <label class="form-check-label" for="shipping_chkbox">Shipping</label>
-                                </div>
-                                <div class="form-check form-check-inline col-3 mr-0">
-                                    <input class="form-check-input" type="checkbox" id="giftwrap_chkbox"
-                                           value="option1" onclick="showGiftwrapTextbox()">
-                                    <label class="form-check-label" for="giftwrap_chkbox">Giftwrap</label>
-                                </div>
-                                <div class="form-check form-check-inline col-3 mr-0">
-                                    <input class="form-check-input" type="checkbox" id="transaction_chkbox"
-                                           value="option1" onclick="showTransactionTextbox()">
-                                    <label class="form-check-label" for="transaction_chkbox">Transaction</label>
-                                </div>
-                                <div class="form-check form-check-inline col-3 mr-0">
-                                    <input class="form-check-input" type="checkbox" id="discounts_chkbox"
-                                           value="option1" onclick="showDiscountTextbox()">
-                                    <label class="form-check-label" for="discounts_chkbox">Discounts</label>
+                                <div class="row mt-2">
+                                    <div class="col-md-3">
+                                        <input type="number" class="form-control" id="shipping_charge"
+                                               placeholder="Enter shipping charges"
+                                               style="display:none">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="number" class="form-control" id="giftwrap_charge"
+                                               placeholder="Enter gift wrapping charges"
+                                               style="display:none">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="number" class="form-control" id="transaction_charge"
+                                               placeholder="Enter transaction charges"
+                                               style="display:none">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="number" class="form-control" id="extra_discount"
+                                               placeholder="Enter discount on total"
+                                               style="display:none">
+                                    </div>
                                 </div>
                             </div>
-
-                            <div class="row mt-2">
-                                <div class="col-md-3">
-                                    <input type="number" class="form-control" id="shipping_charge"
-                                           style="display:none">
-                                </div>
-                                <div class="col-md-3">
-                                    <input type="number" class="form-control" id="giftwrap_charge"
-                                           style="display:none">
-                                </div>
-                                <div class="col-md-3">
-                                    <input type="number" class="form-control" id="transaction_charge"
-                                           style="display:none">
-                                </div>
-                                <div class="col-md-3">
-                                    <input type="number" class="form-control" id="extra_discount"
-                                           style="display:none">
+                            <div class="row mt-4">
+                                <div class="col-md-12">
+                                    <b>Total: ₹</b>
+                                    <label class="form-check-label">
+                                        <label class="font-20 font-bold" id="total_label">0</label>
+                                        (<label id="payment_method">Cash On Delivery</label>)
+                                    </label>
+                                    <input type="number" class="form-control" id="total" hidden>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row mt-4">
-                            <div class="col-md-12">
-                                <label class="form-check-label">
-                                    Total: <span class="font-20 font-bold">₹ 0</span>
-                                    (<label id="payment_method">Cash On Delivery</label>)
-                                </label>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button class="btn btn-primary mt-1 float-right px-4" id="order_details_btn">Next
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <button class="btn btn-primary mt-1 float-right px-4">Next</button>
-                            </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -431,8 +464,8 @@
                 <div class="card-header" id="headingThree">
                     <h5 class="mb-0">
                         <button class="btn btn-link text-dark no-text-decoration w-100 px-0 collapsed"
-                                data-toggle="collapse"
-                                data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                data-toggle="collapse" data-target="#collapseThree" aria-expanded="false"
+                                aria-controls="collapseThree" id="collapseThree_btn" disabled>
                             <span class="circle font-bold float-left" id="panel3">3</span>
                             <span class="circle font-bold float-left bg-success" id="panel3_check"
                                   style="display: none">
@@ -444,6 +477,8 @@
                     </h5>
                 </div>
                 <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                    <div class="loader" style="display:none"></div>
+                    <div class="loader-container" style="display:none"></div>
                     <div class="card-body" id="pickup_address_card">
                         <div class="row">
                             <div class="col-md-6">
@@ -452,7 +487,7 @@
                             </div>
                             <div class="col-md-6">
                                 <a class="no-text-decoration pointer" data-toggle="modal"
-                                   data-target="#add_Address_Modal" onclick="openAddressModal()">
+                                   data-target="#add_Address_Modal">
                                     <span class="float-right text-primary font-bold font-13 mt-1">Add Address</span>
                                     <span class="circle float-right text-primary bg-white pl-5px mr-2 border-light-grey pt-0px"><i
                                             class="fa fa-plus"></i></span>
@@ -460,31 +495,54 @@
                             </div>
                         </div>
                         <hr>
-                        <div class="row mx-1">
+                        <div class="row mx-1" id="pickup_address_list">
                             {% for address in Address_list %}
-                            <div class="col-md-4 mb-2 border-right-5px-white">
+                            <div class="col-md-4 mb-2 border-right-5px-white" id="pickup_address_section">
                                 <div class="row bg-primary border-radius-top py-3 pl-4">
-                                    <h6 class="pt-1 font-bold">{{ address.address_nickname }}</h6>
+                                    <h6 class="pt-1 font-bold">{{ address.address.address_nickname }}</h6>
                                 </div>
                                 <div class="row p-3 border-radius-bottom border border-primary pickup-address-section">
                                     <div class="font-13 font-secondary">
-                                        <p>{{ address.address_line1 }}</p>
-                                        <p>{{ address.address_line2 }}</p>
-                                        <p>{{ address.city }} - {{ address.pincode }} </p>
-                                        <p>{{ address.state|title }}</p>
+                                        <p>{{ address.address.address_line1 }}</p>
+                                        <p>{{ address.address.address_line2 }}</p>
+                                        <p>{{ address.address.city }} - {{ address.address.pincode }} </p>
+                                        <p>{{ address.address.state|title }}</p>
                                     </div>
                                     <div class="py-2 mt-4">
-                                        {% if address.is_supplier_address == True %}
-                                        <button class="btn btn-primary px-3">Selected</button>
-                                        {% else %}
-                                        <button class="btn btn-outline-primary px-3">Select</button>
-                                        {% endif %}
-                                        <span class="address-line-circle text-primary ml-2">
-                                                <i class="fa fa-pencil font-13"></i></span>
+                                        <button class="btn px-3 select-btn {%if address.is_supplier_address == True%}btn-primary{%else%}btn-outline-primary{%endif%}"
+                                                data-sid="{{address.id}}" value="{{address.is_supplier_address}}"
+                                                id="selected_btn_{{address.id}}">
+                                            {%if address.is_supplier_address == True%}Selected{%else%}Select{%endif%}
+                                        </button>
+                                        <span class="address-line-circle text-primary ml-2 pointer">
+                                            <form>
+                                                {% csrf_token %}
+                                                <i class="fa fa-pencil font-13 edit-btn" data-toggle="modal"
+                                                   data-target="#add_Address_Modal"
+                                                   data-sid="{{address.id}}"></i>
+                                            </form>
+                                        </span>
+                                        <span class="address-line-circle text-primary ml-2 pointer">
+                                            <form>
+                                                {% csrf_token %}
+                                                <i class="fa fa-trash font-13 delete-btn" data-sid="{{address.id}}"></i>
+                                            </form>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
                             {% endfor %}
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button class="btn btn-primary mt-1 float-right px-4" id="address_next_btn">Next
+                                </button>
+                                <label id="select_address_msg" class="float-right font-bold text-danger pt-3 mr-4">
+                                    Select One Address
+                                </label>
+                                <input type="checkbox" id="address_selected_check" value="{{address_selected_check}}"
+                                       hidden>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -497,8 +555,8 @@
                 <div class="card-header" id="headingFour">
                     <h5 class="mb-0">
                         <button class="btn btn-link text-dark no-text-decoration w-100 px-0 collapsed"
-                                data-toggle="collapse"
-                                data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                data-toggle="collapse" data-target="#collapseFour" aria-expanded="false"
+                                aria-controls="collapseFour" id="collapseFour_btn">
                             <span class="circle font-bold float-left">4</span>
                             <span class="float-left font-bold ml-4 mt-3px">Package Weight</span>
                             <i class="fa fa-chevron-right chevron float-right mt-1"></i>
@@ -509,19 +567,21 @@
                     <div class="card-body">
                         <div class="form-row" id="package-details">
                             <div class="form-group col-md-3">
-                                <label for="package_weight">Weight</label>
+                                <label for="package_weight">Weight <span class="text-danger">*</span></label>
                                 <div class="input-group labelled-input">
                                     <input type="number" class="form-control" id="package_weight" required>
                                     <div class="input-group-prepend">
                                         <div class="input-group-text">KG</div>
                                     </div>
                                 </div>
+                                <label id="package_weight_error" class="text-danger font-12">Please enter a weight in
+                                    kg</label>
                                 <label class="font-11 text-secondary">(Max 3 digits after decimal place)</br>
                                     Note: The minimum chargeable weight is 0.50 Kg</label>
                             </div>
 
                             <div class="form-group col-md-3">
-                                <label for="package_length">Length</label>
+                                <label for="package_length">Length <span class="text-danger">*</span></label>
                                 <div class="input-group labelled-input">
                                     <input type="number" class="form-control" id="package_length"
                                            onblur="calc_volumetric_weight()" required>
@@ -529,10 +589,12 @@
                                         <div class="input-group-text">CM</div>
                                     </div>
                                 </div>
+                                <label id="package_length_error" class="text-danger font-12">Please enter length in
+                                    cm</label>
                             </div>
 
                             <div class="form-group col-md-3">
-                                <label for="package_width">Width</label>
+                                <label for="package_width">Width <span class="text-danger">*</span></label>
                                 <div class="input-group labelled-input">
                                     <input type="number" class="form-control" id="package_width"
                                            onblur="calc_volumetric_weight()" required>
@@ -540,10 +602,12 @@
                                         <div class="input-group-text">CM</div>
                                     </div>
                                 </div>
+                                <label id="package_width_error" class="text-danger font-12">Please enter length in
+                                    cm</label>
                             </div>
 
                             <div class="form-group col-md-3">
-                                <label for="package_height">Height</label>
+                                <label for="package_height">Height <span class="text-danger">*</span></label>
                                 <div class="input-group labelled-input">
                                     <input type="number" class="form-control" id="package_height"
                                            onblur="calc_volumetric_weight()" required>
@@ -551,6 +615,8 @@
                                         <div class="input-group-text">CM</div>
                                     </div>
                                 </div>
+                                <label id="package_height_error" class="text-danger font-12">Please enter length in
+                                    cm</label>
                             </div>
                         </div>
                         <div class="form-row">
@@ -567,7 +633,9 @@
                                     </div>
                                     <div class="col-md-6">
                                         <small class="font-bold">OR</small>
-                                        <button class="btn btn-primary px-3 ml-3">Add Package</button>
+                                        <button class="btn btn-primary px-3 ml-3" data-toggle="modal"
+                                                data-target="#add_Package_Modal">Add Package
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -584,6 +652,7 @@
 
 
             <!------------------------------------------------- Step Five ------------------------------------------>
+
             <div class="card">
                 <div class="card-header" id="headingFive">
                     <h5 class="mb-0">
@@ -627,7 +696,7 @@
             <!--------------------------------------------------------------------------------------------------------->
 
             <div class="mb-4">
-                <input type="submit" class="btn btn-success float-right mt-2" value="Add Order"></input>
+                <button type="submit" class="btn btn-success float-right mt-2 px-4 font-16" disabled>Add Order</button>
             </div>
         </div>
 
@@ -646,77 +715,80 @@
                         </button>
                     </div>
                     <div class="modal-body">
+                        <input type="number" id="address_id" hidden>
                         <form id="add_address_form">
-                        <div class="form-row mb-3">
-                            <div class="col-md-4">
-                                <label for="address_nickname">Address Nickname
-                                    <i class="fa fa-info-circle font-12 ml-1" data-toggle="tooltip"
-                                       data-original-title="It acts as a nickname for your pickup address. Enter a nickname that will be easy to remember."></i>
-                                </label>
-                                <input type="text" id="address_nickname" class="form-control"
-                                       placeholder="Enter address nickname">
+                            {% csrf_token %}
+                            <div class="form-row mb-3">
+                                <div class="col-md-4">
+                                    <label for="address_nickname">Address Nickname
+                                        <i class="fa fa-info-circle font-12 ml-1" data-toggle="tooltip"
+                                           data-original-title="It acts as a nickname for your pickup address. Enter a nickname that will be easy to remember."></i>
+                                    </label>
+                                    <input type="text" id="address_nickname" class="form-control"
+                                           placeholder="Enter address nickname">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="contact_name">Contact Name</label>
+                                    <input type="text" id="contact_name" class="form-control"
+                                           placeholder="Enter contact name">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="phone">Phone</label>
+                                    <input type="text" id="phone" class="form-control" placeholder="Enter phone number">
+                                </div>
                             </div>
-                            <div class="col-md-4">
-                                <label for="contact_name">Contact Name</label>
-                                <input type="text" id="contact_name" class="form-control"
-                                       placeholder="Enter contact name">
-                            </div>
-                            <div class="col-md-4">
-                                <label for="phone">Phone</label>
-                                <input type="text" id="phone" class="form-control" placeholder="Enter phone number">
-                            </div>
-                        </div>
 
-                        <div class="form-row mb-3">
-                            <div class="col-md-6">
-                                <label for="address_line1">Address Line 1</label>
-                                <input type="text" id="address_line1" class="form-control"
-                                       placeholder="House No/Flat No, Building Name">
+                            <div class="form-row mb-3">
+                                <div class="col-md-6">
+                                    <label for="address_line1">Address Line 1</label>
+                                    <input type="text" id="address_line1" class="form-control"
+                                           placeholder="House No/Flat No, Building Name">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="address_line2">Address Line 2</label>
+                                    <input type="text" id="address_line2" class="form-control"
+                                           placeholder="Locality/ Street/ Area">
+                                </div>
                             </div>
-                            <div class="col-md-6">
-                                <label for="address_line2">Address Line 2</label>
-                                <input type="text" id="address_line2" class="form-control"
-                                       placeholder="Locality/ Street/ Area">
-                            </div>
-                        </div>
 
-                        <div class="form-row mb-3">
-                            <div class="col-md-3">
-                                <label for="address_pincode">Pincode</label>
-                                <input type="text" id="address_pincode" class="form-control"
-                                       placeholder="Enter pincode">
+                            <div class="form-row mb-3">
+                                <div class="col-md-3">
+                                    <label for="address_pincode">Pincode</label>
+                                    <input type="text" id="address_pincode" class="form-control"
+                                           placeholder="Enter pincode">
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="address_city">City</label>
+                                    <input type="text" id="address_city" class="form-control"
+                                           placeholder="Enter city">
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="address_state">State</label>
+                                    <select id="address_state" class="form-control">
+                                        <option value="None" selected>Select State.</option>
+                                        {% for key in indian_states %}
+                                        <option value="{{key}}">{{key|title}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="address_email">Email</label>
+                                    <input type="text" id="address_email" class="form-control"
+                                           placeholder="Enter email">
+                                </div>
                             </div>
-                            <div class="col-md-3">
-                                <label for="address_city">City</label>
-                                <input type="text" id="address_city" class="form-control"
-                                       placeholder="Enter city">
+                            <div class="form-row" hidden>
+                                <div class="form-check form-check-inline col-12 mb-2">
+                                    <input class="form-check-input" type="checkbox" id="supplier_address">
+                                    <label class="form-check-label" for="supplier_address">
+                                        Add this address as a supplier address
+                                    </label>
+                                </div>
                             </div>
-                            <div class="col-md-3">
-                                <label for="address_state">State</label>
-                                <select id="address_state" class="form-control">
-                                    <option value="None" selected>Select State.</option>
-                                    {% for key in indian_states %}
-                                    <option value="{{key}}">{{key|title}}</option>
-                                    {% endfor %}
-                                </select>
+
+                            <div class="modal-footer">
+                                <button class="btn btn-primary px-4" id="add_address_btn">Save</button>
                             </div>
-                            <div class="col-md-3">
-                                <label for="address_email">Email</label>
-                                <input type="text" id="address_email" class="form-control"
-                                       placeholder="Enter email">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-check form-check-inline col-12 mb-2">
-                                <input class="form-check-input" type="checkbox" id="supplier_address">
-                                <label class="form-check-label" for="supplier_address">
-                                    Add this address as a supplier address
-                                </label>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary px-4">Save</button>
-                        </div>
                         </form>
                     </div>
                 </div>
@@ -725,6 +797,135 @@
         <!---------------------------------------------------------------------------------------------------------------->
 
 
+        <!----------------------------------------------Package Modal---------------------------------------------------->
+        <div class="modal fade blur-background" id="add_Package_Modal" tabindex="-1" role="dialog"
+             aria-labelledby="packageModalTitle" aria-hidden="true">
+            <div class="loader" style="display:none"></div>
+            <div class="loader-container" style="display:none"></div>
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="packageModalTitle">Add Package Details</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="add_package_form">
+                            {% csrf_token %}
+                            <div class="form-row mb-5">
+                                <div class="col-md-6">
+                                    <label for="package_name">Package Name</label>
+                                    <input type="text" id="package_name" class="form-control"
+                                           placeholder="Enter package name">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="package_type">Package Type</label>
+                                    <select id="package_type" class="form-control">
+                                        <option value="" selected>Select Package Type</option>
+                                        <option value="box">Box</option>
+                                        <option value="flyer">Flyer</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-row mt-3">
+                                <div class="col-md-12">
+                                    <h5>Package Dimensions</h5>
+                                </div>
+                            </div>
+                            <hr class="mt-0 mb-2">
+
+                            <div class="form-row mb-5">
+                                <div class="form-group col-md-3">
+                                    <label for="package_length_cm">Length <span class="text-danger">*</span></label>
+                                    <div class="input-group labelled-input">
+                                        <input type="number" class="form-control" id="package_length_cm" required>
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">CM</div>
+                                        </div>
+                                    </div>
+                                    <label id="package_length_cm_error" class="text-danger font-12">Please enter length in
+                                        cm</label>
+                                </div>
+
+                                <div class="form-group col-md-3">
+                                    <label for="package_width_cm">Width <span class="text-danger">*</span></label>
+                                    <div class="input-group labelled-input">
+                                        <input type="number" class="form-control" id="package_width_cm" required>
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">CM</div>
+                                        </div>
+                                    </div>
+                                    <label id="package_width_cm_error" class="text-danger font-12">Please enter length in
+                                        cm</label>
+                                </div>
+
+                                <div class="form-group col-md-3">
+                                    <label for="package_height_cm">Height <span class="text-danger">*</span></label>
+                                    <div class="input-group labelled-input">
+                                        <input type="number" class="form-control" id="package_height_cm" required>
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">CM</div>
+                                        </div>
+                                    </div>
+                                    <label id="package_height_cm_error" class="text-danger font-12">Please enter length in
+                                        cm</label>
+                                </div>
+                            </div>
+
+
+                            <div class="form-row mt-3">
+                                <div class="col-md-12">
+                                    <h5>Package Images</h5>
+                                    <small>(Upload Length X Width X Height Images of the Package)</small>
+                                </div>
+                            </div>
+                            <hr class="mt-0 mb-2">
+
+                            <div class="form-row mb-5">
+                                <div class="col-md-6">
+                                    <label for="package_images">Upload Files</label>
+                                    <input type="file" id="package_images" class="form-control">
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-check form-check-inline col-12 mb-2">
+                                        <input class="form-check-input" type="checkbox" id="manage_inventory_chkbx">
+                                        <label class="form-check-label" for="manage_inventory_chkbx">
+                                            Manage inventory for this package
+                                        </label>
+                                    </div>
+
+                                    <div class="form-check form-check-inline col-12 mb-2">
+                                        <label for="package_quantity">Package Quantity</label>
+                                        <input type="text" id="package_quantity" class="form-control" placeholder="Enter quantity available">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-row mt-3">
+                                <div class="col-md-12">
+                                    <h5>Add SKUs</h5>
+                                </div>
+                            </div>
+                            <hr class="mt-0 mb-2">
+
+                            <div class="form-row mb-3">
+                                <div class="col-md-3">
+                                    <label for="package_sku_code">Add Single SKU <span class="text-danger font-12">*</span></label>
+                                    <input type="text" id="package_sku_code" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button class="btn btn-primary px-4" id="add_package_details_btn">Add</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!---------------------------------------------------------------------------------------------------------------->
     </div>
 
     <div class="col-md-3 help-text">

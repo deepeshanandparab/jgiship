@@ -1,3 +1,11 @@
+/*---------------------------------------------- Notification Messages ------------------------------------------------*/
+var message = document.getElementById("message-container");
+
+setTimeout(function(){
+   message.style.display = "none";
+}, 5000);
+/*---------------------------------------------------------------------------------------------------------------------*/
+
 function showBillingForm() {
   var checkBox = document.getElementById("billing_address_checkbox");
   var billing_form = document.getElementById("billing_address_form");
@@ -107,7 +115,6 @@ $('#collapseFive').on('hidden.bs.collapse', function() {
 
 function generate_order_id(){
     var d = new Date();
-    console.log(d)
     var date = d.getDate();
     var month = d.getMonth() + 1;
     var year = d.getFullYear();
@@ -118,6 +125,8 @@ function generate_order_id(){
     merged_string = date+''+month+''+year+''+hour+''+minute+''+seconds+''+milliseconds
     order_id = parseInt(merged_string)
     document.getElementById("order_id").value = order_id;
+    $("#order_id_label").text(order_id);
+    $('#order_id_error').hide();
 }
 
 
@@ -144,7 +153,7 @@ function setDate() {
 window.onload = function() {
   setDate();
 };
-/* ------------------------------------------------------------------------------ */
+/* ----------------------------------------------- Calculate Volumetric Weight---------------------------------------- */
 
 function calc_volumetric_weight(){
     if (document.getElementById("package_length").value != null){
@@ -155,7 +164,6 @@ function calc_volumetric_weight(){
                 package_height = document.getElementById("package_height").value;
                 volumetric_weight = (package_length * package_width * package_height)/5000;
                 $("#volumetric_weight").text(volumetric_weight);
-                console.log('volumetric_weight',volumetric_weight)
             }
         }
     }
@@ -166,15 +174,25 @@ function calc_volumetric_weight(){
 }
 
 
-
+/*-----------------------------------------------Hide/Show Extra Charges------------------------------------------------*/
 function showShippingTextbox() {
   var shipping_chkbox = document.getElementById("shipping_chkbox");
   var shipping_charge = document.getElementById("shipping_charge");
 
   if (shipping_chkbox.checked == true){
     shipping_charge.style.display = "block";
+    shipping_charge = (($('#shipping_charge').val()=='') ? 0 : parseFloat($('#shipping_charge').val()));
+    total = parseFloat($('#total').val());
+    total = total + shipping_charge;
+    $('#total').val(total);
+    $("#total_label").text(total);
   } else {
     shipping_charge.style.display = "none";
+    shipping_charge = (($('#shipping_charge').val()=='') ? 0 : parseFloat($('#shipping_charge').val()));
+    total = parseFloat($('#total').val());
+    total = total - shipping_charge;
+    $('#total').val(total);
+    $("#total_label").text(total);
   }
 }
 
@@ -184,8 +202,18 @@ function showGiftwrapTextbox() {
 
   if (giftwrap_chkbox.checked == true){
     giftwrap_charge.style.display = "block";
+    giftwrap_charge = (($('#giftwrap_charge').val()=='') ? 0 : parseFloat($('#giftwrap_charge').val()));
+    total = parseFloat($('#total').val());
+    total = total + giftwrap_charge;
+    $('#total').val(total);
+    $("#total_label").text(total);
   } else {
     giftwrap_charge.style.display = "none";
+    giftwrap_charge = (($('#giftwrap_charge').val()=='') ? 0 : parseFloat($('#giftwrap_charge').val()));
+    total = parseFloat($('#total').val());
+    total = total - giftwrap_charge;
+    $('#total').val(total);
+    $("#total_label").text(total);
   }
 }
 
@@ -195,8 +223,18 @@ function showTransactionTextbox() {
 
   if (transaction_chkbox.checked == true){
     transaction_charge.style.display = "block";
+    transaction_charge = (($('#transaction_charge').val()=='') ? 0 : parseFloat($('#transaction_charge').val()));
+    total = parseFloat($('#total').val());
+    total = total + transaction_charge;
+    $('#total').val(total);
+    $("#total_label").text(total);
   } else {
     transaction_charge.style.display = "none";
+    transaction_charge = (($('#transaction_charge').val()=='') ? 0 : parseFloat($('#transaction_charge').val()));
+    total = parseFloat($('#total').val());
+    total = total - transaction_charge;
+    $('#total').val(total);
+    $("#total_label").text(total);
   }
 }
 
@@ -206,10 +244,22 @@ function showDiscountTextbox() {
 
   if (discounts_chkbox.checked == true){
     extra_discount.style.display = "block";
+    extra_discount = (($('#extra_discount').val()=='') ? 0 : parseFloat($('#extra_discount').val()));
+    total = parseFloat($('#total').val());
+    total = total - extra_discount;
+    $('#total').val(total);
+    $("#total_label").text(total);
   } else {
     extra_discount.style.display = "none";
+    extra_discount = (($('#extra_discount').val()=='') ? 0 : parseFloat($('#extra_discount').val()));
+    total = parseFloat($('#total').val());
+    total = total + extra_discount;
+    $('#total').val(total);
+    $("#total_label").text(total);
   }
 }
+//------------------------------------------------------------------------------------------------------------------------------
+
 
 
 function setTextCOD(){
@@ -238,60 +288,113 @@ $(document).ready(function(){
 });
 
 
-
+/* ------------------------------------------- Calculation for Sub-Total ---------------------------------------------*/
 $(document).ready(function(){
-    quantity = $('#quantity').val();
-    unit_price = $('#unit_price').val();
-    tax_rate = $('#tax_rate').val();
-    discount = $('#discount').val();
-    sub_total = $('#sub_total').val();
+    $("#quantity").focusout(function(){
+        quantity = $('#quantity').val();
+        unit_price = $('#unit_price').val();
+        tax_rate = $('#tax_rate').val();
+        discount = $('#discount').val();
+        sub_total = $('#sub_total').val();
 
-    $("#discount").blur(function(){
-        if(quantity!=null){
-            if(unit_price!=null){
-                if(tax_rate!=null){
-                    if(discount!=null){
-                            sub_total = (quantity*unit_price)+(tax_rate/100)-(discount/100);
-                            console.log('quantity', quantity);
-                            console.log('unit_price', unit_price);
-                            console.log('tax_rate', tax_rate);
-                            console.log('discount', discount);
-                            console.log('sub_total', sub_total);
-                        }
-                    else{
-                            sub_total = (quantity*unit_price)+(tax_rate/100);
-                            console.log('quantity', quantity);
-                            console.log('unit_price', unit_price);
-                            console.log('tax_rate', tax_rate);
-                            console.log('discount', discount);
-                            console.log('sub_total', sub_total);
-                        }
-                    }
-                else{
-                    sub_total = (quantity*unit_price);
-                    console.log('quantity', quantity);
-                            console.log('unit_price', unit_price);
-                            console.log('tax_rate', tax_rate);
-                            console.log('discount', discount);
-                            console.log('sub_total', sub_total);
-                 }
-                }
-            else{
-                sub_total = 0;
-                console.log('quantity', quantity);
-                            console.log('unit_price', unit_price);
-                            console.log('tax_rate', tax_rate);
-                            console.log('discount', discount);
-                            console.log('sub_total', sub_total);
-            }
-        }
-        else{
-                sub_total = 0;
-                console.log('quantity', quantity);
-                            console.log('unit_price', unit_price);
-                            console.log('tax_rate', tax_rate);
-                            console.log('discount', discount);
-                            console.log('sub_total', sub_total);
-            }
-        });
+        sub_total = (quantity*unit_price)+((quantity*unit_price)*tax_rate/100)-((quantity*unit_price)*discount/100);
+        sub_total = parseFloat(sub_total.toFixed(2));
+        $('#sub_total').val(sub_total);
+        $('#total').val(sub_total);
+        $("#sub_total_label").text(sub_total);
+        $("#total_label").text(sub_total);
+    });
+
+    $("#unit_price").focusout(function(){
+        quantity = $('#quantity').val();
+        unit_price = $('#unit_price').val();
+        tax_rate = $('#tax_rate').val();
+        discount = $('#discount').val();
+        sub_total = $('#sub_total').val();
+
+        sub_total = (quantity*unit_price)+((quantity*unit_price)*tax_rate/100)-((quantity*unit_price)*discount/100);
+        sub_total = parseFloat(sub_total.toFixed(2));
+        $('#sub_total').val(sub_total);
+        $('#total').val(sub_total);
+        $("#sub_total_label").text(sub_total);
+        $("#total_label").text(sub_total);
+    });
+
+    $("#tax_rate").focusout(function(){
+        quantity = $('#quantity').val();
+        unit_price = $('#unit_price').val();
+        tax_rate = $('#tax_rate').val();
+        discount = $('#discount').val();
+        sub_total = $('#sub_total').val();
+
+        sub_total = (quantity*unit_price)+((quantity*unit_price)*tax_rate/100)-((quantity*unit_price)*discount/100);
+        sub_total = parseFloat(sub_total.toFixed(2));
+        $('#sub_total').val(sub_total);
+        $('#total').val(sub_total);
+        $("#sub_total_label").text(sub_total);
+        $("#total_label").text(sub_total);
+    });
+
+    $("#discount").focusout(function(){
+        quantity = $('#quantity').val();
+        unit_price = $('#unit_price').val();
+        tax_rate = $('#tax_rate').val();
+        discount = $('#discount').val();
+        sub_total = $('#sub_total').val();
+
+        sub_total = (quantity*unit_price)+((quantity*unit_price)*tax_rate/100)-((quantity*unit_price)*discount/100);
+        sub_total = parseFloat(sub_total.toFixed(2));
+        $('#sub_total').val(sub_total);
+        $('#total').val(sub_total);
+        $("#sub_total_label").text(sub_total);
+        $("#total_label").text(sub_total);
+    });
+
+
+
+// --------------------------------Extra Changes Calculation for Total------------------------------------
+    $("#shipping_charge").focusout(function(){
+        sub_total = parseFloat($('#sub_total').val());
+        shipping_charge = (($('#shipping_charge').val()=='') ? 0 : parseFloat($('#shipping_charge').val()));
+        giftwrap_charge = (($('#giftwrap_charge').val()=='') ? 0 : parseFloat($('#giftwrap_charge').val()));
+        transaction_charge = (($('#transaction_charge').val()=='') ? 0 : parseFloat($('#transaction_charge').val()));
+        extra_discount = (($('#extra_discount').val()=='') ? 0 : parseFloat($('#extra_discount').val()));
+        total = sub_total + shipping_charge + giftwrap_charge + transaction_charge - extra_discount;
+        $('#total').val(total);
+        $("#total_label").text(total);
+    });
+
+    $("#giftwrap_charge").focusout(function(){
+        sub_total = parseFloat($('#sub_total').val());
+        shipping_charge = (($('#shipping_charge').val()=='') ? 0 : parseFloat($('#shipping_charge').val()));
+        giftwrap_charge = (($('#giftwrap_charge').val()=='') ? 0 : parseFloat($('#giftwrap_charge').val()));
+        transaction_charge = (($('#transaction_charge').val()=='') ? 0 : parseFloat($('#transaction_charge').val()));
+        extra_discount = (($('#extra_discount').val()=='') ? 0 : parseFloat($('#extra_discount').val()));
+        total = sub_total + shipping_charge + giftwrap_charge + transaction_charge - extra_discount;
+        $('#total').val(total);
+        $("#total_label").text(total);
+    });
+
+    $("#transaction_charge").focusout(function(){
+        sub_total = parseFloat($('#sub_total').val());
+        shipping_charge = (($('#shipping_charge').val()=='') ? 0 : parseFloat($('#shipping_charge').val()));
+        giftwrap_charge = (($('#giftwrap_charge').val()=='') ? 0 : parseFloat($('#giftwrap_charge').val()));
+        transaction_charge = (($('#transaction_charge').val()=='') ? 0 : parseFloat($('#transaction_charge').val()));
+        extra_discount = (($('#extra_discount').val()=='') ? 0 : parseFloat($('#extra_discount').val()));
+        total = sub_total + shipping_charge + giftwrap_charge + transaction_charge - extra_discount;
+        $('#total').val(total);
+        $("#total_label").text(total);
+    });
+
+    $("#extra_discount").focusout(function(){
+        sub_total = parseFloat($('#sub_total').val());
+        shipping_charge = (($('#shipping_charge').val()=='') ? 0 : parseFloat($('#shipping_charge').val()));
+        giftwrap_charge = (($('#giftwrap_charge').val()=='') ? 0 : parseFloat($('#giftwrap_charge').val()));
+        transaction_charge = (($('#transaction_charge').val()=='') ? 0 : parseFloat($('#transaction_charge').val()));
+        extra_discount = (($('#extra_discount').val()=='') ? 0 : parseFloat($('#extra_discount').val()));
+        total = sub_total + shipping_charge + giftwrap_charge + transaction_charge - extra_discount;
+        $('#total').val(total);
+        $("#total_label").text(total);
+    });
 });
+

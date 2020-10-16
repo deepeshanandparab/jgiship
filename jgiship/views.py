@@ -1,17 +1,21 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
-from datetime import datetime
-
-from jgiship.models import Buyer, PickupAddress
+from jgiship.models import Buyer, PickupAddress, Order, Product, SelectedAddress
 from .states import STATES
 
 def add_order(request):
-    Address_list = PickupAddress.objects.all()
-    context = {'title': 'Add Order', 'indian_states': STATES, 'Address_list': Address_list}
+    address_list = SelectedAddress.objects.all()
+    for i in range(0, len(address_list)):
+        if(address_list[i].is_supplier_address==True):
+            address_selected = True
+            break
+        else:
+            address_selected = False
+    context = {'title': 'Add Order', 'indian_states': STATES, 'Address_list': address_list, 'address_selected_check': address_selected}
     return render(request, 'jgiship/add_order.html', context)
 
 
-def create_order(request):
+def create_buyer(request):
     if request.method == 'POST':
         user = request.user
         buyer_name = request.POST['buyer_name']
@@ -36,7 +40,7 @@ def create_order(request):
         billing_state = request.POST['billing_state']
         billing_country = request.POST['billing_country']
 
-        Buyer.objects.create(
+        buyer_instance = Buyer.objects.create(
             user = user,
             buyer_name = buyer_name,
             phone_number = phone_number,
@@ -60,11 +64,62 @@ def create_order(request):
             billing_state = billing_state,
             billing_country = billing_country
         )
+    return HttpResponse(Buyer)
+
+
+
+def create_order(request):
+    if request.method == 'POST':
+        id = request.POST['order_id']
+        order_date = request.POST['order_date']
+        order_channel = request.POST['order_channel']
+        product_name = request.POST['product_name']
+        sku = request.POST['sku']
+        quantity = request.POST['quantity']
+        unit_price = request.POST['unit_price']
+        tax_rate = request.POST['tax_rate']
+        hsn = request.POST['hsn']
+        discount = request.POST['discount']
+        product_category = request.POST['product_category']
+        payment_method = request.POST['payment_method']
+        sub_total = request.POST['sub_total']
+        shipping_charge = request.POST['shipping_charge']
+        giftwrap_charge = request.POST['giftwrap_charge']
+        transaction_charge = request.POST['transaction_charge']
+        extra_discount = request.POST['extra_discount']
+        total = request.POST['total']
+
+        order_instance = Order.objects.create(
+            id=id,
+            order_date=order_date,
+            order_channel=order_channel
+        )
+
+        Product.objects.create(
+            order = order_instance,
+            product_name = product_name,
+            sku = sku,
+            quantity = quantity,
+            unit_price = unit_price,
+            tax_rate = tax_rate,
+            hsn = hsn,
+            discount = discount,
+            product_category = product_category,
+            payment_method = payment_method,
+            sub_total = sub_total,
+            shipping_charge = shipping_charge,
+            giftwrap_charge = giftwrap_charge,
+            transaction_charge = transaction_charge,
+            extra_discount = extra_discount,
+            total = total
+        )
     return HttpResponse('')
+
 
 
 def add_pickup_address(request):
     if request.method == 'POST':
+        id=request.POST['address_id']
         user = request.user
         address_nickname = request.POST['address_nickname']
         contact_name = request.POST['contact_name']
@@ -75,22 +130,118 @@ def add_pickup_address(request):
         city = request.POST['address_city']
         state = request.POST['address_state']
         email = request.POST['address_email']
-        is_supplier_address = request.POST['supplier_address']
+        if(request.POST['supplier_address']=='on'):
+            is_supplier_address = True
+        else:
+            is_supplier_address = False
 
-        PickupAddress.objects.create(
-            user = user,
-            address_nickname = address_nickname,
-            contact_name = contact_name,
-            phone_number = phone_number,
-            address_line1 = address_line1,
-            address_line2 = address_line2,
-            pincode = pincode,
-            city = city,
-            state = state,
-            email = email,
-            is_supplier_address = is_supplier_address
-        )
+        if(id==''):
+            pickup_address = PickupAddress(
+                user = user,
+                address_nickname = address_nickname,
+                contact_name = contact_name,
+                phone_number = phone_number,
+                address_line1 = address_line1,
+                address_line2 = address_line2,
+                pincode = pincode,
+                city = city,
+                state = state,
+                email = email
+            )
+            pickup_address.save()
+
+            selected_address = SelectedAddress(
+                id=pickup_address.id,
+                address = pickup_address,
+                is_supplier_address = is_supplier_address
+            )
+            selected_address.save()
+        else:
+            pickup_address = PickupAddress(
+                id = id,
+                user=user,
+                address_nickname=address_nickname,
+                contact_name=contact_name,
+                phone_number=phone_number,
+                address_line1=address_line1,
+                address_line2=address_line2,
+                pincode=pincode,
+                city=city,
+                state=state,
+                email=email,
+            )
+            pickup_address.save()
+
+            selected_address = SelectedAddress(
+                id=id,
+                address=pickup_address,
+                is_supplier_address=is_supplier_address
+            )
+            selected_address.save()
     return HttpResponse('')
+
+
+def edit_pickup_address(request):
+    if request.method == 'POST':
+        id = request.POST.get('address_id')
+        address = PickupAddress.objects.get(pk=id)
+        selected_address = SelectedAddress.objects.get(id=id)
+        address_data = {'id': address.id,
+                        'address_nickname': address.address_nickname,
+                        'contact_name': address.contact_name,
+                        'phone_number': address.phone_number,
+                        'address_line1': address.address_line1,
+                        'address_line2': address.address_line2,
+                        'pincode': address.pincode,
+                        'city': address.city,
+                        'state': address.state,
+                        'email': address.email,
+                        'is_supplier_address': selected_address.is_supplier_address
+                        }
+        return JsonResponse(address_data)
+
+
+def select_pickup_address(request):
+    if request.method == 'POST':
+        id = int(request.POST.get('address_id'))
+        address = PickupAddress.objects.get(pk=id)
+        address_list = PickupAddress.objects.all()
+        is_supplier_address = request.POST.get('selected_btn')
+        other_address = request.POST.get('other_btn')
+        selected_address_list = SelectedAddress.objects.all()
+
+        for i in range(0, len(selected_address_list)):
+            if(selected_address_list[i].id == id):
+                select_pickup_address = SelectedAddress(
+                    id=id,
+                    address=address,
+                    is_supplier_address=is_supplier_address
+                )
+                select_pickup_address.save()
+                print('Selected address: ', address.id)
+                print('Selected id: ', id)
+            else:
+                for i in range(0, len(address_list)):
+                    if(id != address_list[i].id):
+                        select_pickup_address = SelectedAddress(
+                            id=address_list[i].id,
+                            address=address_list[i],
+                            is_supplier_address=other_address
+                        )
+                        select_pickup_address.save()
+                        print('Other address: ', address_list[i].id)
+                        print('Other id: ', id)
+    return HttpResponse('')
+
+
+def delete_pickup_address(request):
+    if request.method == 'POST':
+        id = request.POST.get('address_id')
+        address = PickupAddress.objects.get(pk=id)
+        address.delete()
+        return JsonResponse({'status':1})
+    else:
+        return JsonResponse({'status':0})
 
 
 def process_order(request):
