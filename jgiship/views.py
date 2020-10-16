@@ -1,17 +1,23 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
-from jgiship.models import Buyer, PickupAddress, Order, Product, SelectedAddress
+from jgiship.models import Buyer, PickupAddress, Order, Product, SelectedAddress, PackageDetails, PackageImages
 from .states import STATES
 
 def add_order(request):
     address_list = SelectedAddress.objects.all()
+    package_list = PackageDetails.objects.filter(user=request.user)
     for i in range(0, len(address_list)):
         if(address_list[i].is_supplier_address==True):
             address_selected = True
             break
         else:
             address_selected = False
-    context = {'title': 'Add Order', 'indian_states': STATES, 'Address_list': address_list, 'address_selected_check': address_selected}
+    context = {'title': 'Add Order',
+               'indian_states': STATES,
+               'Address_list': address_list,
+               'address_selected_check': address_selected,
+               'package_list': package_list
+               }
     return render(request, 'jgiship/add_order.html', context)
 
 
@@ -218,8 +224,6 @@ def select_pickup_address(request):
                     is_supplier_address=is_supplier_address
                 )
                 select_pickup_address.save()
-                print('Selected address: ', address.id)
-                print('Selected id: ', id)
             else:
                 for i in range(0, len(address_list)):
                     if(id != address_list[i].id):
@@ -229,8 +233,6 @@ def select_pickup_address(request):
                             is_supplier_address=other_address
                         )
                         select_pickup_address.save()
-                        print('Other address: ', address_list[i].id)
-                        print('Other id: ', id)
     return HttpResponse('')
 
 
@@ -242,6 +244,42 @@ def delete_pickup_address(request):
         return JsonResponse({'status':1})
     else:
         return JsonResponse({'status':0})
+
+
+def add_package_details(request):
+    if request.method == 'POST':
+        user = request.user
+        package_name = request.POST.get('package_name')
+        package_type = request.POST.get('package_type')
+        package_length = request.POST.get('package_length_cm')
+        package_width = request.POST.get('package_width_cm')
+        package_height = request.POST.get('package_width_cm')
+        package_quantity = request.POST.get('package_quantity')
+        package_sku = request.POST.get('package_sku_code')
+        image = request.POST.get('package_files')
+
+        package_details_instance = PackageDetails.objects.create(
+            user=user,
+            package_name=package_name,
+            package_type=package_type,
+            package_length=package_length,
+            package_width=package_width,
+            package_height=package_height,
+            package_quantity=package_quantity,
+            package_sku=package_sku
+        )
+
+        PackageImages.objects.create(
+            package = package_details_instance,
+            image=image
+        )
+    return HttpResponse('')
+
+
+
+def add_new_order(request):
+    pass
+
 
 
 def process_order(request):

@@ -557,7 +557,11 @@
                         <button class="btn btn-link text-dark no-text-decoration w-100 px-0 collapsed"
                                 data-toggle="collapse" data-target="#collapseFour" aria-expanded="false"
                                 aria-controls="collapseFour" id="collapseFour_btn">
-                            <span class="circle font-bold float-left">4</span>
+                            <span class="circle font-bold float-left" id="panel4">4</span>
+                            <span class="circle font-bold float-left bg-success" id="panel4_check"
+                                  style="display: none">
+                                <i class="fa fa-check"></i>
+                            </span>
                             <span class="float-left font-bold ml-4 mt-3px">Package Weight</span>
                             <i class="fa fa-chevron-right chevron float-right mt-1"></i>
                         </button>
@@ -565,86 +569,109 @@
                 </div>
                 <div id="collapseFour" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
                     <div class="card-body">
-                        <div class="form-row" id="package-details">
-                            <div class="form-group col-md-3">
-                                <label for="package_weight">Weight <span class="text-danger">*</span></label>
-                                <div class="input-group labelled-input">
-                                    <input type="number" class="form-control" id="package_weight" required>
-                                    <div class="input-group-prepend">
-                                        <div class="input-group-text">KG</div>
+                        <form id="package_weight_form">
+                            <div class="form-row" id="package-details">
+                                <div class="form-group col-md-3">
+                                    <label for="package_weight">Weight <span class="text-danger">*</span></label>
+                                    <div class="input-group labelled-input">
+                                        <input type="number" class="form-control" id="package_weight" required>
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">KG</div>
+                                        </div>
                                     </div>
+                                    <label id="package_weight_error" class="text-danger font-12">Please enter a weight
+                                        in
+                                        kg</label>
+                                    <label class="font-11 text-secondary">(Max 3 digits after decimal place)</br>
+                                        Note: The minimum chargeable weight is 0.50 Kg</label>
                                 </div>
-                                <label id="package_weight_error" class="text-danger font-12">Please enter a weight in
-                                    kg</label>
-                                <label class="font-11 text-secondary">(Max 3 digits after decimal place)</br>
-                                    Note: The minimum chargeable weight is 0.50 Kg</label>
-                            </div>
 
-                            <div class="form-group col-md-3">
-                                <label for="package_length">Length <span class="text-danger">*</span></label>
-                                <div class="input-group labelled-input">
-                                    <input type="number" class="form-control" id="package_length"
-                                           onblur="calc_volumetric_weight()" required>
-                                    <div class="input-group-prepend">
-                                        <div class="input-group-text">CM</div>
+                                <div class="form-group col-md-3">
+                                    <label for="package_length">Length <span class="text-danger">*</span></label>
+                                    <div class="input-group labelled-input">
+                                        <input type="number" class="form-control" id="package_length"
+                                               onblur="calc_volumetric_weight()" required>
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">CM</div>
+                                        </div>
                                     </div>
+                                    <label id="package_length_error" class="text-danger font-12">Please enter length in
+                                        cm</label>
                                 </div>
-                                <label id="package_length_error" class="text-danger font-12">Please enter length in
-                                    cm</label>
-                            </div>
 
-                            <div class="form-group col-md-3">
-                                <label for="package_width">Width <span class="text-danger">*</span></label>
-                                <div class="input-group labelled-input">
-                                    <input type="number" class="form-control" id="package_width"
-                                           onblur="calc_volumetric_weight()" required>
-                                    <div class="input-group-prepend">
-                                        <div class="input-group-text">CM</div>
+                                <div class="form-group col-md-3">
+                                    <label for="package_width">Width <span class="text-danger">*</span></label>
+                                    <div class="input-group labelled-input">
+                                        <input type="number" class="form-control" id="package_width"
+                                               onblur="calc_volumetric_weight()" required>
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">CM</div>
+                                        </div>
                                     </div>
+                                    <label id="package_width_error" class="text-danger font-12">Please enter width in
+                                        cm</label>
                                 </div>
-                                <label id="package_width_error" class="text-danger font-12">Please enter length in
-                                    cm</label>
-                            </div>
 
-                            <div class="form-group col-md-3">
-                                <label for="package_height">Height <span class="text-danger">*</span></label>
-                                <div class="input-group labelled-input">
-                                    <input type="number" class="form-control" id="package_height"
-                                           onblur="calc_volumetric_weight()" required>
-                                    <div class="input-group-prepend">
-                                        <div class="input-group-text">CM</div>
+                                <div class="form-group col-md-3">
+                                    <label for="package_height">Height <span class="text-danger">*</span></label>
+                                    <div class="input-group labelled-input">
+                                        <input type="number" class="form-control" id="package_height"
+                                               onblur="calc_volumetric_weight()" required>
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">CM</div>
+                                        </div>
                                     </div>
-                                </div>
-                                <label id="package_height_error" class="text-danger font-12">Please enter length in
-                                    cm</label>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-12">
-                                <label>Volumetric Weight (Kg)</label>
-                                <label id="volumetric_weight" class="font-bold"></label>
-                                <label class="font-bold">Kg</label></br>
-                                <label class="mt-2 font-bold">Package Details</label>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <select id="package_options" class="form-control">
-                                            <option value="None" selected>Select Package</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <small class="font-bold">OR</small>
-                                        <button class="btn btn-primary px-3 ml-3" data-toggle="modal"
-                                                data-target="#add_Package_Modal">Add Package
-                                        </button>
-                                    </div>
+                                    <label id="package_height_error" class="text-danger font-12">Please enter height in
+                                        cm</label>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <button class="btn btn-primary mt-1 float-right px-4">Next</button>
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <input type="text" id="volumetric_weight_text" hidden>
+                                    <label>Volumetric Weight (Kg)</label>
+                                    <label id="volumetric_weight" class="font-bold"></label>
+                                    <label class="font-bold">Kg</label></br>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="mt-2 font-bold">Package Details</label>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label id="updated_message"
+                                                   class="mt-2 font-bold text-success">Updated!</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-inline row" id="package_options_section_row">
+                                                <div class="col-12" id="package_options_section">
+                                                    <select id="package_options" class="form-control w-90">
+                                                        <option value="None" selected>Select Package</option>
+                                                        {% for package in package_list %}
+                                                        <option value="{{package}}">{{package.package_name}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                    <i class="fa fa-refresh ml-2 pointer"
+                                                       onclick="refresh_packages()"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <small class="font-bold">OR</small>
+                                            <button class="btn btn-primary px-3 ml-3" data-toggle="modal"
+                                                    data-target="#add_Package_Modal">Add Package
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button class="btn btn-primary mt-1 float-right px-4" id="package_weight_btn">Next
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -659,7 +686,11 @@
                         <button class="btn btn-link text-dark no-text-decoration w-100 px-0 collapsed"
                                 data-toggle="collapse"
                                 data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                            <span class="circle font-bold float-left">5</span>
+                            <span class="circle font-bold float-left" id="panel5">5</span>
+                            <span class="circle font-bold float-left bg-success" id="panel5_check"
+                                  style="display: none">
+                                <i class="fa fa-check"></i>
+                            </span>
                             <span class="float-left font-bold ml-4 mt-3px">Other Details</span>
                             <i class="fa fa-chevron-right chevron float-right mt-1"></i>
                         </button>
@@ -696,7 +727,7 @@
             <!--------------------------------------------------------------------------------------------------------->
 
             <div class="mb-4">
-                <button type="submit" class="btn btn-success float-right mt-2 px-4 font-16" disabled>Add Order</button>
+                <button type="submit" id="add_order_btn" class="btn btn-success float-right mt-2 px-4 font-16" disabled>Add Order</button>
             </div>
         </div>
 
@@ -811,21 +842,25 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form id="add_package_form">
+                        <form id="add_package_form" enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="form-row mb-5">
                                 <div class="col-md-6">
-                                    <label for="package_name">Package Name</label>
+                                    <label for="package_name">Package Name <span class="text-danger">*</span></label>
                                     <input type="text" id="package_name" class="form-control"
                                            placeholder="Enter package name">
+                                    <label id="package_name_error" class="text-danger font-12">Please enter package
+                                        name</label>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="package_type">Package Type</label>
+                                    <label for="package_type">Package Type <span class="text-danger">*</span></label>
                                     <select id="package_type" class="form-control">
                                         <option value="" selected>Select Package Type</option>
                                         <option value="box">Box</option>
                                         <option value="flyer">Flyer</option>
                                     </select>
+                                    <label id="package_type_error" class="text-danger font-12">Please select package
+                                        type</label>
                                 </div>
                             </div>
 
@@ -836,8 +871,8 @@
                             </div>
                             <hr class="mt-0 mb-2">
 
-                            <div class="form-row mb-5">
-                                <div class="form-group col-md-3">
+                            <div class="form-row mb-5" id="package_dimensions">
+                                <div class="form-group col-md-4">
                                     <label for="package_length_cm">Length <span class="text-danger">*</span></label>
                                     <div class="input-group labelled-input">
                                         <input type="number" class="form-control" id="package_length_cm" required>
@@ -845,11 +880,12 @@
                                             <div class="input-group-text">CM</div>
                                         </div>
                                     </div>
-                                    <label id="package_length_cm_error" class="text-danger font-12">Please enter length in
+                                    <label id="package_length_cm_error" class="text-danger font-12">Please enter length
+                                        in
                                         cm</label>
                                 </div>
 
-                                <div class="form-group col-md-3">
+                                <div class="form-group col-md-4">
                                     <label for="package_width_cm">Width <span class="text-danger">*</span></label>
                                     <div class="input-group labelled-input">
                                         <input type="number" class="form-control" id="package_width_cm" required>
@@ -857,11 +893,12 @@
                                             <div class="input-group-text">CM</div>
                                         </div>
                                     </div>
-                                    <label id="package_width_cm_error" class="text-danger font-12">Please enter length in
+                                    <label id="package_width_cm_error" class="text-danger font-12">Please enter length
+                                        in
                                         cm</label>
                                 </div>
 
-                                <div class="form-group col-md-3">
+                                <div class="form-group col-md-4">
                                     <label for="package_height_cm">Height <span class="text-danger">*</span></label>
                                     <div class="input-group labelled-input">
                                         <input type="number" class="form-control" id="package_height_cm" required>
@@ -869,7 +906,8 @@
                                             <div class="input-group-text">CM</div>
                                         </div>
                                     </div>
-                                    <label id="package_height_cm_error" class="text-danger font-12">Please enter length in
+                                    <label id="package_height_cm_error" class="text-danger font-12">Please enter length
+                                        in
                                         cm</label>
                                 </div>
                             </div>
@@ -883,22 +921,27 @@
                             </div>
                             <hr class="mt-0 mb-2">
 
+                            <div class="form-row mb-1">
+                                <div class="col-md-6">
+                                    <label for="package_images">Upload Files <span class="text-danger">*</span></label>
+                                    <input type="file" id="package_images" class="form-control pt-3px" multiple>
+                                    <label id="package_images_error" class="text-danger font-12">Please select files to
+                                        upload</label>
+                                </div>
+                                <div class="col-md-6" id="package_quantity_section" style="display: none;">
+                                    <label for="package_quantity">Package Quantity</label>
+                                    <input type="number" id="package_quantity" class="form-control" value="0"
+                                           placeholder="Enter quantity available">
+                                </div>
+                            </div>
                             <div class="form-row mb-5">
                                 <div class="col-md-6">
-                                    <label for="package_images">Upload Files</label>
-                                    <input type="file" id="package_images" class="form-control">
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-check form-check-inline col-12 mb-2">
-                                        <input class="form-check-input" type="checkbox" id="manage_inventory_chkbx">
+                                    <div class="form-check form-check-inline col-12 mb-1">
+                                        <input class="form-check-input" type="checkbox" id="manage_inventory_chkbx"
+                                               onclick="showPackageQuantity()">
                                         <label class="form-check-label" for="manage_inventory_chkbx">
                                             Manage inventory for this package
                                         </label>
-                                    </div>
-
-                                    <div class="form-check form-check-inline col-12 mb-2">
-                                        <label for="package_quantity">Package Quantity</label>
-                                        <input type="text" id="package_quantity" class="form-control" placeholder="Enter quantity available">
                                     </div>
                                 </div>
                             </div>
@@ -911,9 +954,11 @@
                             <hr class="mt-0 mb-2">
 
                             <div class="form-row mb-3">
-                                <div class="col-md-3">
-                                    <label for="package_sku_code">Add Single SKU <span class="text-danger font-12">*</span></label>
+                                <div class="col-md-6">
+                                    <label for="package_sku_code">Add Single SKU <span
+                                            class="text-danger font-12">*</span></label>
                                     <input type="text" id="package_sku_code" class="form-control">
+                                    <label id="package_sku_error" class="text-danger font-12">Please enter sku</label>
                                 </div>
                             </div>
 

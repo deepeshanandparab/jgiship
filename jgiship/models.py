@@ -96,15 +96,17 @@ class PackageMetrics(models.Model):
 
 
 class PackageDetails(models.Model):
-    User = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     package_name = models.CharField(max_length=50)
     package_type = models.CharField(max_length=20)
     package_length = models.FloatField()
+    package_width = models.FloatField()
     package_height = models.FloatField()
+    package_quantity = models.IntegerField(default=0, null=True, blank=True)
     package_sku = models.IntegerField()
 
     def __str__(self):
-        return f'{self.package_name} added by {self.User.username}'
+        return f'{self.package_name} added by {self.user.username}'
 
 
 class PackageImages(models.Model):

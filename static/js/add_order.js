@@ -17,6 +17,7 @@ function showBillingForm() {
   }
 }
 
+
 function showLocationMap() {
   var checkBox = document.getElementById("hyperlocal-shipment");
   var location_map = document.getElementById("location-map");
@@ -25,6 +26,18 @@ function showLocationMap() {
     location_map.style.display = "block";
   } else {
     location_map.style.display = "none";
+  }
+}
+
+
+function showPackageQuantity() {
+  var manage_inventory_checkBox = document.getElementById("manage_inventory_chkbx");
+  var package_quantity_section = document.getElementById("package_quantity_section");
+
+  if (manage_inventory_checkBox.checked == true){
+    package_quantity_section.style.display = "block";
+  } else {
+    package_quantity_section.style.display = "none";
   }
 }
 
