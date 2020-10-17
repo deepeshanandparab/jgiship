@@ -3,8 +3,8 @@ from . import views
 
 urlpatterns = [
     path('add-order/', views.add_order, name='add-order'),
-    path('buyer/create/', views.create_buyer, name='create-buyer'),
-    path('order/create/', views.create_order, name='create-order'),
+    # path('buyer/create/', views.create_buyer, name='create-buyer'),
+    # path('order/create/', views.create_order, name='create-order'),
     path('order/add/', views.add_new_order, name='add-new_order'),
 
 

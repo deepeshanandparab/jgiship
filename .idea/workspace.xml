@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="77003730-e078-41ee-9790-0a03b101d3db" name="Default Changelist" comment="" />
+    <list default="true" id="6604764f-7dfa-4b11-ae67-81bc9a95745e" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -12,18 +12,18 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Python Script" />
-        <option value="HTML File" />
       </list>
     </option>
   </component>
-  <component name="ProjectId" id="1iS1hsUMT0NWbcakxPy288fIEqI" />
+  <component name="ProjectId" id="1irIQBU0wbuatusqv65xJ4C7as0" />
   <component name="PropertiesComponent">
-    <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\Dipesh\Development\Just_Get_It\just_get_it\static\js" />
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Dipesh\Development\Django 2.2\just_get_it" />
+      <recent name="D:\Dipesh\Development\Django 2.2\just_get_it\jgiship" />
+      <recent name="D:\Dipesh\Development\Django 2.2\just_get_it\jgiship\templates\jgiship" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -43,11 +43,11 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="77003730-e078-41ee-9790-0a03b101d3db" name="Default Changelist" comment="" />
-      <created>1601886301811</created>
+      <changelist id="6604764f-7dfa-4b11-ae67-81bc9a95745e" name="Default Changelist" comment="" />
+      <created>1602659265367</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1601886301811</updated>
+      <updated>1602659265367</updated>
     </task>
     <servers />
   </component>

@@ -341,3 +341,7 @@ input[type="file" button] {
     width: 90%!important;
 }
 
+.noDisplay{
+    display: none!important;
+}
+

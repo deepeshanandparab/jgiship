@@ -54,7 +54,7 @@ class Product(models.Model):
     giftwrap_charge = models.FloatField(null=True, blank=True)
     transaction_charge = models.FloatField(null=True, blank=True)
     extra_discount = models.FloatField(null=True, blank=True)
-    total = models.FloatField()
+    total = models.CharField(max_length=20)
 
     def __str__(self):
         return f'{self.id} : {self.product_name}'
@@ -83,18 +83,6 @@ class SelectedAddress(models.Model):
         return f'Address selected : {self.is_supplier_address} id: ({self.id})'
 
 
-class PackageMetrics(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    weight = models.FloatField()
-    length = models.FloatField()
-    width = models.FloatField()
-    height = models.FloatField()
-    volumetric_weight = models.FloatField()
-
-    def __str__(self):
-        return f'{self.volumetric_weight} Kg'
-
-
 class PackageDetails(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     package_name = models.CharField(max_length=50)
@@ -115,11 +103,24 @@ class PackageImages(models.Model):
     uploaded_on = models.DateTimeField(auto_now_add=True)
 
 
+class PackageMetrics(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    weight = models.FloatField()
+    length = models.FloatField()
+    width = models.FloatField()
+    height = models.FloatField()
+    volumetric_weight = models.CharField(max_length=20)
+    package_id = models.CharField(max_length=10)
+
+    def __str__(self):
+        return f'{self.volumetric_weight} Kg'
+
+
 class OtherDetails(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    reseller_name = models.CharField(max_length=30)
-    eway_bill_number = models.CharField(max_length=30)
-    gstin_number = models.CharField(max_length=30)
+    reseller_name = models.CharField(max_length=30, null=True, blank=True)
+    eway_bill_number = models.CharField(max_length=30, null=True, blank=True)
+    gstin_number = models.CharField(max_length=30, null=True, blank=True)
 
     def __str__(self):
         return f'Reseller Name: {self.reseller_name}'

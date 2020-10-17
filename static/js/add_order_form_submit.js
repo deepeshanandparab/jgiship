@@ -362,8 +362,8 @@ $('#add_package_details_btn').click(function(){
 var updated_message = document.getElementById('updated_message');
 
 function refresh_packages(){
-    updated_message.style.display = 'block'
     $('#package_options_section').load(location.href +  ' #package_options_section_row');
+    updated_message.style.display = 'block';
     setTimeout(function(){
          updated_message.style.display = 'none';
     }, 3000);
@@ -402,8 +402,8 @@ $('#package_weight_btn').click(function(){
 
 
 $('#add_order_btn').click(function(){
-         $('.loader-container').show();
-         $('.loader').show();
+        $('.page-loader-container').show();
+        $('.page-loader').show();
          billing_address_state = $('#billing_address_checkbox').is(':checked') ? 'True' : 'False';
          var csr = $('input[name=csrfmiddlewaretoken]').val();
          payment_method = $('#cod').is(':checked') ? 'cod' : 'prepaid';
@@ -411,15 +411,19 @@ $('#add_order_btn').click(function(){
          giftwrap_charge  = $('#giftwrap_charge').val()=='' ? 0 : $('#giftwrap_charge').val();
          transaction_charge = $('#transaction_charge').val()=='' ? 0 : $('#transaction_charge').val();
          extra_discount = $('#extra_discount').val()=='' ? 0 : $('#extra_discount').val();
-         if($('#billing_address_checkbox').val()==true){
+         reseller_name = $('#reseller_name').val()=='' ? 'None' : $('#reseller_name').val();
+         eway_bill_number = $('#eway_bill_number').val()=='' ? 'None' : $('#eway_bill_number').val();
+         gstin_number = $('#gstin_number').val()=='' ? 'None' : $('#gstin_number').val();
+         if($('#billing_address_checkbox').val()==false){
              $.ajax({
-                type:'POST',
+                method:'POST',
                 url: domain_name + 'order/add/',
                 data:{
                     /*-------------------Buyer Details------------------*/
                     buyer_name:$('#buyer_name').val(),
                     phone_number:$('#phone_number').val(),
                     alternate_phone_number:$('#alternate_phone_number').val(),
+                    email:$('#buyer_email').val(),
                     address1:$('#address1').val(),
                     address2:$('#address2').val(),
                     pincode:$('#pincode').val(),
@@ -443,12 +447,12 @@ $('#add_order_btn').click(function(){
                     order_channel:$('#order_channel').val(),
                     /*-------------------Product Details------------------*/
                     product_name:$('#product_name').val(),
-                    sku:$('#sku').val(),
+                    sku: $('#sku').val()=='' ? 0 : $('#sku').val(),
                     quantity:$('#quantity').val(),
                     unit_price:$('#unit_price').val(),
-                    tax_rate:$('#tax_rate').val(),
-                    hsn:$('#hsn').val(),
-                    discount:$('#discount').val(),
+                    tax_rate:$('#tax_rate').val()=='' ? 0 : $('#tax_rate').val(),
+                    hsn:$('#hsn').val()=='' ? 0 : $('#hsn').val(),
+                    discount:$('#discount').val()=='' ? 0 : $('#discount').val(),
                     product_category:$('#product_category').val(),
                     payment_method:payment_method,
                     sub_total:$('#sub_total').val(),
@@ -457,24 +461,37 @@ $('#add_order_btn').click(function(){
                     transaction_charge:transaction_charge,
                     extra_discount:extra_discount,
                     total:$('#total').val(),
+                    /*-------------------Package Weight------------------*/
+                    package_weight: $('#package_weight').val(),
+                    package_length: $('#package_length').val(),
+                    package_width: $('#package_width').val(),
+                    package_height: $('#package_height').val(),
+                    volumetric_weight_value: $('#volumetric_weight_text').val(),
+                    package: $('#package_options').val()=='' ? 'None' : $('#package_options').val(),
+                    /*-------------------Other Details------------------*/
+                    reseller_name: reseller_name,
+                    eway_bill_number: eway_bill_number,
+                    gstin_number: gstin_number,
                     csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
                     },
                 success:function(){
-                        $('.loader-container').hide();
-                        $('.loader').hide();
+                        window.scrollTo({ top: 0});
+                        $('.page-loader-container').hide();
+                        $('.page-loader').hide();
+                        location.reload();
                     }
                 });
          }
          else{
              $.ajax({
-                type:'POST',
+                method:'POST',
                 url: domain_name + 'order/add/',
                 data:{
                     /*-------------------Buyer Details------------------*/
                     buyer_name:$('#buyer_name').val(),
                     phone_number:$('#phone_number').val(),
                     alternate_phone_number:$('#alternate_phone_number').val(),
-                    buyer_email:$('#buyer_email').val(),
+                    email:$('#buyer_email').val(),
                     address1:$('#address1').val(),
                     address2:$('#address2').val(),
                     pincode:$('#pincode').val(),
@@ -498,12 +515,12 @@ $('#add_order_btn').click(function(){
                     order_channel:$('#order_channel').val(),
                     /*-------------------Product Details------------------*/
                     product_name:$('#product_name').val(),
-                    sku:$('#sku').val(),
+                    sku: $('#sku').val()=='' ? 0 : $('#sku').val(),
                     quantity:$('#quantity').val(),
                     unit_price:$('#unit_price').val(),
-                    tax_rate:$('#tax_rate').val(),
-                    hsn:$('#hsn').val(),
-                    discount:$('#discount').val(),
+                    tax_rate:$('#tax_rate').val()=='' ? 0 : $('#tax_rate').val(),
+                    hsn:$('#hsn').val()=='' ? 0 : $('#hsn').val(),
+                    discount:$('#discount').val()=='' ? 0 : $('#discount').val(),
                     product_category:$('#product_category').val(),
                     payment_method:payment_method,
                     sub_total:$('#sub_total').val(),
@@ -512,11 +529,24 @@ $('#add_order_btn').click(function(){
                     transaction_charge:transaction_charge,
                     extra_discount:extra_discount,
                     total:$('#total').val(),
+                    /*-------------------Package Weight------------------*/
+                    package_weight: $('#package_weight').val(),
+                    package_length: $('#package_length').val(),
+                    package_width: $('#package_width').val(),
+                    package_height: $('#package_height').val(),
+                    volumetric_weight_value: $('#volumetric_weight_text').val(),
+                    package: $('#package_options').val()=='' ? 'None' : $('#package_options').val(),
+                    /*-------------------Other Details------------------*/
+                    reseller_name: reseller_name,
+                    eway_bill_number: eway_bill_number,
+                    gstin_number: gstin_number,
                     csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
                     },
                 success:function(){
-                        $('.loader-container').hide();
-                        $('.loader').hide();
+                        window.scrollTo({ top: 0});
+                        $('.page-loader-container').hide();
+                        $('.page-loader').hide();
+                        location.reload();
                     }
                 });
          }

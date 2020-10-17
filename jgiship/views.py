@@ -1,6 +1,7 @@
+from django.contrib import messages
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render
-from jgiship.models import Buyer, PickupAddress, Order, Product, SelectedAddress, PackageDetails, PackageImages
+from django.shortcuts import render, redirect
+from jgiship.models import Buyer, PickupAddress, Order, Product, SelectedAddress, PackageDetails, PackageImages, PackageMetrics, OtherDetails
 from .states import STATES
 
 def add_order(request):
@@ -21,105 +22,105 @@ def add_order(request):
     return render(request, 'jgiship/add_order.html', context)
 
 
-def create_buyer(request):
-    if request.method == 'POST':
-        user = request.user
-        buyer_name = request.POST['buyer_name']
-        phone_number = request.POST['phone_number']
-        alternate_phone_number = request.POST['alternate_phone_number']
-        buyer_email = request.POST['buyer_email']
-        address1 = request.POST['address1']
-        address2 = request.POST['address2']
-        pincode = request.POST['pincode']
-        city = request.POST['city']
-        state = request.POST['state']
-        country = request.POST['country']
-        company = request.POST['company']
-        billing_address_checkbox = request.POST['billing_address_checkbox']
-        billing_name = request.POST['billing_name']
-        billing_phone_number = request.POST['billing_phone_number']
-        billing_email = request.POST['billing_email']
-        billing_address1 = request.POST['billing_address1']
-        billing_address2 = request.POST['billing_address2']
-        billing_pincode = request.POST['billing_pincode']
-        billing_city = request.POST['billing_city']
-        billing_state = request.POST['billing_state']
-        billing_country = request.POST['billing_country']
+# def create_buyer(request):
+#     if request.method == 'POST':
+#         user = request.user
+#         buyer_name = request.POST['buyer_name']
+#         phone_number = request.POST['phone_number']
+#         alternate_phone_number = request.POST['alternate_phone_number']
+#         buyer_email = request.POST['buyer_email']
+#         address1 = request.POST['address1']
+#         address2 = request.POST['address2']
+#         pincode = request.POST['pincode']
+#         city = request.POST['city']
+#         state = request.POST['state']
+#         country = request.POST['country']
+#         company = request.POST['company']
+#         billing_address_checkbox = request.POST['billing_address_checkbox']
+#         billing_name = request.POST['billing_name']
+#         billing_phone_number = request.POST['billing_phone_number']
+#         billing_email = request.POST['billing_email']
+#         billing_address1 = request.POST['billing_address1']
+#         billing_address2 = request.POST['billing_address2']
+#         billing_pincode = request.POST['billing_pincode']
+#         billing_city = request.POST['billing_city']
+#         billing_state = request.POST['billing_state']
+#         billing_country = request.POST['billing_country']
+#
+#         buyer_instance = Buyer.objects.create(
+#             user = user,
+#             buyer_name = buyer_name,
+#             phone_number = phone_number,
+#             alternate_phone_number = alternate_phone_number,
+#             email_id = buyer_email,
+#             address_line1 = address1,
+#             address_line2 = address2,
+#             pincode = pincode,
+#             city = city,
+#             state = state,
+#             country = country,
+#             company_name = company,
+#             same_billing_address = billing_address_checkbox,
+#             billing_buyer_name = billing_name,
+#             billing_phone_number = billing_phone_number,
+#             billing_email_id = billing_email,
+#             billing_address_line1 = billing_address1,
+#             billing_address_line2 = billing_address2,
+#             billing_pincode = billing_pincode,
+#             billing_city = billing_city,
+#             billing_state = billing_state,
+#             billing_country = billing_country
+#         )
+#     return HttpResponse(Buyer)
 
-        buyer_instance = Buyer.objects.create(
-            user = user,
-            buyer_name = buyer_name,
-            phone_number = phone_number,
-            alternate_phone_number = alternate_phone_number,
-            email_id = buyer_email,
-            address_line1 = address1,
-            address_line2 = address2,
-            pincode = pincode,
-            city = city,
-            state = state,
-            country = country,
-            company_name = company,
-            same_billing_address = billing_address_checkbox,
-            billing_buyer_name = billing_name,
-            billing_phone_number = billing_phone_number,
-            billing_email_id = billing_email,
-            billing_address_line1 = billing_address1,
-            billing_address_line2 = billing_address2,
-            billing_pincode = billing_pincode,
-            billing_city = billing_city,
-            billing_state = billing_state,
-            billing_country = billing_country
-        )
-    return HttpResponse(Buyer)
 
 
-
-def create_order(request):
-    if request.method == 'POST':
-        id = request.POST['order_id']
-        order_date = request.POST['order_date']
-        order_channel = request.POST['order_channel']
-        product_name = request.POST['product_name']
-        sku = request.POST['sku']
-        quantity = request.POST['quantity']
-        unit_price = request.POST['unit_price']
-        tax_rate = request.POST['tax_rate']
-        hsn = request.POST['hsn']
-        discount = request.POST['discount']
-        product_category = request.POST['product_category']
-        payment_method = request.POST['payment_method']
-        sub_total = request.POST['sub_total']
-        shipping_charge = request.POST['shipping_charge']
-        giftwrap_charge = request.POST['giftwrap_charge']
-        transaction_charge = request.POST['transaction_charge']
-        extra_discount = request.POST['extra_discount']
-        total = request.POST['total']
-
-        order_instance = Order.objects.create(
-            id=id,
-            order_date=order_date,
-            order_channel=order_channel
-        )
-
-        Product.objects.create(
-            order = order_instance,
-            product_name = product_name,
-            sku = sku,
-            quantity = quantity,
-            unit_price = unit_price,
-            tax_rate = tax_rate,
-            hsn = hsn,
-            discount = discount,
-            product_category = product_category,
-            payment_method = payment_method,
-            sub_total = sub_total,
-            shipping_charge = shipping_charge,
-            giftwrap_charge = giftwrap_charge,
-            transaction_charge = transaction_charge,
-            extra_discount = extra_discount,
-            total = total
-        )
-    return HttpResponse('')
+# def create_order(request):
+#     if request.method == 'POST':
+#         id = request.POST['order_id']
+#         order_date = request.POST['order_date']
+#         order_channel = request.POST['order_channel']
+#         product_name = request.POST['product_name']
+#         sku = request.POST['sku']
+#         quantity = request.POST['quantity']
+#         unit_price = request.POST['unit_price']
+#         tax_rate = request.POST['tax_rate']
+#         hsn = request.POST['hsn']
+#         discount = request.POST['discount']
+#         product_category = request.POST['product_category']
+#         payment_method = request.POST['payment_method']
+#         sub_total = request.POST['sub_total']
+#         shipping_charge = request.POST['shipping_charge']
+#         giftwrap_charge = request.POST['giftwrap_charge']
+#         transaction_charge = request.POST['transaction_charge']
+#         extra_discount = request.POST['extra_discount']
+#         total = request.POST['total']
+#
+#         order_instance = Order.objects.create(
+#             id=id,
+#             order_date=order_date,
+#             order_channel=order_channel
+#         )
+#
+#         Product.objects.create(
+#             order = order_instance,
+#             product_name = product_name,
+#             sku = sku,
+#             quantity = quantity,
+#             unit_price = unit_price,
+#             tax_rate = tax_rate,
+#             hsn = hsn,
+#             discount = discount,
+#             product_category = product_category,
+#             payment_method = payment_method,
+#             sub_total = sub_total,
+#             shipping_charge = shipping_charge,
+#             giftwrap_charge = giftwrap_charge,
+#             transaction_charge = transaction_charge,
+#             extra_discount = extra_discount,
+#             total = total
+#         )
+#     return HttpResponse('')
 
 
 
@@ -278,7 +279,140 @@ def add_package_details(request):
 
 
 def add_new_order(request):
-    pass
+    if request.method == 'POST':
+        # Buyer Details
+        user = request.user
+        buyer_name = request.POST.get('buyer_name')
+        phone_number = request.POST.get('phone_number')
+        alternate_phone_number = request.POST.get('alternate_phone_number')
+        email_id = request.POST.get('email')
+        address_line1 = request.POST.get('address1')
+        address_line2 = request.POST.get('address2')
+        pincode = request.POST.get('pincode')
+        city = request.POST.get('city')
+        state = request.POST.get('state')
+        country = request.POST.get('country')
+        company_name = request.POST.get('company')
+        same_billing_address = request.POST.get('billing_address_checkbox')
+        billing_buyer_name = request.POST.get('billing_name')
+        billing_phone_number = request.POST.get('billing_phone_number')
+        billing_email_id = request.POST.get('billing_email')
+        billing_address_line1 = request.POST.get('billing_address1')
+        billing_address_line2 = request.POST.get('billing_address2')
+        billing_pincode = request.POST.get('billing_pincode')
+        billing_city = request.POST.get('billing_city')
+        billing_state = request.POST.get('billing_state')
+        billing_country = request.POST.get('billing_country')
+
+        buyer_instance = Buyer.objects.create(
+            user = user,
+            buyer_name = buyer_name,
+            phone_number = phone_number,
+            alternate_phone_number = alternate_phone_number,
+            email_id = email_id,
+            address_line1 = address_line1,
+            address_line2 = address_line2,
+            pincode = pincode,
+            city = city,
+            state = state,
+            country = country,
+            company_name = company_name,
+            same_billing_address = same_billing_address,
+            billing_buyer_name = billing_buyer_name,
+            billing_phone_number = billing_phone_number,
+            billing_email_id = billing_email_id,
+            billing_address_line1 = billing_address_line1,
+            billing_address_line2 = billing_address_line2,
+            billing_pincode = billing_pincode,
+            billing_city = billing_city,
+            billing_state = billing_state,
+            billing_country = billing_country
+        )
+
+        # Order Details
+        id = request.POST.get('order_id')
+        buyer = buyer_instance
+        order_date = request.POST.get('order_date')
+        order_channel = request.POST.get('order_channel')
+
+        order_instance = Order.objects.create(
+            id = id,
+            buyer = buyer,
+            order_date = order_date,
+            order_channel = order_channel
+        )
+
+        # Product Details
+        order = order_instance
+        product_name = request.POST.get('product_name')
+        sku = request.POST.get('sku')
+        quantity = request.POST.get('quantity')
+        unit_price = request.POST.get('unit_price')
+        tax_rate = request.POST.get('tax_rate')
+        hsn = request.POST.get('hsn')
+        discount = request.POST.get('discount')
+        product_category = request.POST.get('product_category')
+        payment_method = request.POST.get('payment_method')
+        sub_total = request.POST.get('sub_total')
+        shipping_charge = request.POST.get('shipping_charge')
+        giftwrap_charge = request.POST.get('giftwrap_charge')
+        transaction_charge = request.POST.get('transaction_charge')
+        extra_discount = request.POST.get('extra_discount')
+        total = request.POST.get('total')
+
+        Product.objects.create(
+            order = order,
+            product_name = product_name,
+            sku = sku,
+            quantity = quantity,
+            unit_price = unit_price,
+            tax_rate = tax_rate,
+            hsn = hsn,
+            discount = discount,
+            product_category = product_category,
+            payment_method = payment_method,
+            sub_total = sub_total,
+            shipping_charge = shipping_charge,
+            giftwrap_charge = giftwrap_charge,
+            transaction_charge = transaction_charge,
+            extra_discount = extra_discount,
+            total = total
+        )
+
+        # Package Metrics
+        order = order_instance
+        weight = request.POST.get('package_weight')
+        length = request.POST.get('package_length')
+        width = request.POST.get('package_width')
+        height = request.POST.get('package_height')
+        volumetric_weight = request.POST.get('volumetric_weight_value')
+        package = request.POST.get('package')
+
+        PackageMetrics.objects.create(
+            order = order,
+            weight = weight,
+            length = length,
+            width = width,
+            height = height,
+            volumetric_weight = volumetric_weight,
+            package_id = package
+        )
+
+        # Other Details
+        order = order_instance
+        reseller_name = request.POST.get('reseller_name')
+        eway_bill_number = request.POST.get('eway_bill_number')
+        gstin_number = request.POST.get('gstin_number')
+
+        OtherDetails.objects.create(
+            order = order,
+            reseller_name = reseller_name,
+            eway_bill_number = eway_bill_number,
+            gstin_number = gstin_number
+        )
+    return HttpResponse('')
+
+
 
 
 

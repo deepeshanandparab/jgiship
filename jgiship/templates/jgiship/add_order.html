@@ -4,16 +4,6 @@
 {% block content %}
 <div class="row">
     <div class="col-md-9" id="add_order_page">
-        <div class="col-md-12 text-center" id="message-container">
-            {% for message in messages %}
-            <div class="text-center alert {% if message.tags == 'error' %} alert-danger {% else %} alert-{{message.tags}} {% endif %}"
-                 role="alert">
-                <i class="fa  {% if message.tags == 'error' %} fa-close {% else %} fa-check {% endif %}"></i> {{ message
-                }}
-            </div>
-            {% endfor %}
-        </div>
-
         <div id="accordion">
             <!------------------------------------------------- Step One --------------------------------------------->
             <div class="card">
@@ -646,9 +636,9 @@
                                             <div class="form-inline row" id="package_options_section_row">
                                                 <div class="col-12" id="package_options_section">
                                                     <select id="package_options" class="form-control w-90">
-                                                        <option value="None" selected>Select Package</option>
+                                                        <option value="" selected>Select Package</option>
                                                         {% for package in package_list %}
-                                                        <option value="{{package}}">{{package.package_name}}</option>
+                                                        <option value="{{package.id}}">{{package.package_name}}</option>
                                                         {% endfor %}
                                                     </select>
                                                     <i class="fa fa-refresh ml-2 pointer"

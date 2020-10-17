@@ -1,10 +1,7 @@
-/*---------------------------------------------- Notification Messages ------------------------------------------------*/
-var message = document.getElementById("message-container");
-
-setTimeout(function(){
-   message.style.display = "none";
-}, 5000);
-/*---------------------------------------------------------------------------------------------------------------------*/
+var message_container = document.getElementById('message-container');
+    setTimeout(function(){
+        message_container.classList.add('noDisplay');
+        }, 3000);
 
 function showBillingForm() {
   var checkBox = document.getElementById("billing_address_checkbox");
@@ -176,12 +173,14 @@ function calc_volumetric_weight(){
                 package_width = document.getElementById("package_width").value;
                 package_height = document.getElementById("package_height").value;
                 volumetric_weight = (package_length * package_width * package_height)/5000;
+                $("#volumetric_weight_text").val(volumetric_weight);
                 $("#volumetric_weight").text(volumetric_weight);
             }
         }
     }
     else{
         volumetric_weight = 0;
+        $("#volumetric_weight_text").val(volumetric_weight);
         $("#volumetric_weight").text(volumetric_weight);
     }
 }
