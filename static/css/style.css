@@ -341,7 +341,16 @@ input[type="file" button] {
     width: 90%!important;
 }
 
-.noDisplay{
+.no-visible{
     display: none!important;
 }
+
+.visible{
+    display: block!important;
+}
+
+.left-25p{
+    left: 25%important;
+}
+
 

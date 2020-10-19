@@ -1,4 +1,5 @@
 domain_name = 'http://127.0.0.1:8000/ship/'
+var message_container = document.getElementById('message-container');
 
 $(document).ready(function(){
     $('#buyer_name_error').hide();
@@ -77,26 +78,26 @@ $(document).ready(function(){
     });
 
      /* ---------------------------------------- Package Details---------------------------------------------*/
-    $('#package_name').focusout(function(){
-        if($('#package_name').val()!=''){$('#package_name_error').hide();}
+    $('#id_package_name').focusout(function(){
+        if($('#d_package_name').val()!=''){$('#package_name_error').hide();}
     });
-    $('#package_type').focusout(function(){
-        if($('#package_type').val()!=''){$('#package_type_error').hide();}
+    $('#id_package_type').focusout(function(){
+        if($('#id_package_type').val()!=''){$('#package_type_error').hide();}
     });
-    $('#package_length_cm').focusout(function(){
-        if($('#package_length_cm').val()!=''){$('#package_length_cm_error').hide();}
+    $('#id_package_length').focusout(function(){
+        if($('#id_package_length').val()!=''){$('#package_length_cm_error').hide();}
     });
-    $('#package_width_cm').focusout(function(){
-        if($('#package_width_cm').val()!=''){$('#package_width_cm_error').hide();}
+    $('#id_package_width').focusout(function(){
+        if($('#id_package_width').val()!=''){$('#package_width_cm_error').hide();}
     });
-    $('#package_height_cm').focusout(function(){
-        if($('#package_height_cm').val()!=''){$('#package_height_cm_error').hide();}
+    $('#id_package_height').focusout(function(){
+        if($('#id_package_height').val()!=''){$('#package_height_cm_error').hide();}
     });
-    $('#package_images').focusout(function(){
-        if($('#package_images').val()!=''){$('#package_images_error').hide();}
+    $('#id_image').focusout(function(){
+        if($('#id_image').val()!=''){$('#package_images_error').hide();}
     });
-    $('#package_sku_code').focusout(function(){
-        if($('#package_sku_code').val()!=''){$('#package_sku_error').hide();}
+    $('#id_package_sku').focusout(function(){
+        if($('#id_package_sku').val()!=''){$('#package_sku_error').hide();}
     });
 
     /* ---------------------------------------- Package Weight ---------------------------------------------*/
@@ -317,58 +318,8 @@ $('#address_next_btn').click(function(){
 });
 
 
-$('#add_package_details_btn').click(function(){
-        if($('#add_package_form').valid()) {
-             $('.loader-container').show();
-             $('.loader').show();
-             $.ajax({
-                    method:'POST',
-                    url: domain_name + 'package-details/create/',
-                    data:{
-                        package_name: $('#package_name').val(),
-                        package_type: $('#package_type').val(),
-                        package_length_cm: $('#package_length_cm').val(),
-                        package_width_cm: $('#package_width_cm').val(),
-                        package_height_cm: $('#package_height_cm').val(),
-                        package_files: $('#package_images').val(),
-                        package_quantity: $('#package_quantity').val(),
-                        package_sku_code: $('#package_sku_code').val(),
-                        csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
-                        },
-                    success:function(data){
-                            $('.loader-container').hide();
-                            $('.loader').hide();
-                            $('#add_Package_Modal').modal('hide');
-                            $('#add_package_form')[0].reset();
-                            return false;
-                        }
-                    });
-        }
-        else{
-             if($('#package_name').val()==''){$('#package_name_error').show();}
-             if($('#package_type').val()==''){$('#package_type_error').show();}
-             if($('#package_length_cm').val()==''){$('#package_length_cm_error').show();}
-             if($('#package_width_cm').val()==''){$('#package_width_cm_error').show();}
-             if($('#package_height_cm').val()==''){$('#package_height_cm_error').show();}
-             if($('#package_images').val()==''){$('#package_images_error').show();}
-             if($('#package_sku_code').val()==''){$('#package_sku_error').show();}
-        }
-        return false;
-    });
 
 
-
-/*-------------------------------------------Packages Updated-----------------------------------------*/
-var updated_message = document.getElementById('updated_message');
-
-function refresh_packages(){
-    $('#package_options_section').load(location.href +  ' #package_options_section_row');
-    updated_message.style.display = 'block';
-    setTimeout(function(){
-         updated_message.style.display = 'none';
-    }, 3000);
-}
-/*---------------------------------------------------------------------------------------------------*/
 
 
 $('#package_weight_btn').click(function(){
@@ -396,6 +347,54 @@ $('#package_weight_btn').click(function(){
              if($('#package_height').val()==''){$('#package_height_error').show();}
         }
     });
+
+
+$('#add_package_form').submit(function(e){
+        if($('#add_package_form').valid()) {
+            e.preventDefault();
+             $('.loader-container').show();
+             $('.loader').show();
+             $form = $(this)
+             var formData = new FormData(this);
+             $.ajax({
+                 url: window.location.pathname,
+                 type: 'POST',
+                 data: formData,
+                 success: function (response) {
+                         $('.loader-container').hide();
+                         $('.loader').hide();
+                         $('#add_Package_Modal').modal('hide');
+                         $('#add_package_form')[0].reset();
+                         return false;
+                 },
+                 cache: false,
+                 contentType: false,
+                 processData: false
+             });
+        }
+        else{
+             if($('#id_package_name').val()==''){$('#package_name_error').show();}
+             if($('#id_package_type').val()==''){$('#package_type_error').show();}
+             if($('#id_package_length').val()==''){$('#package_length_cm_error').show();}
+             if($('#id_package_width').val()==''){$('#package_width_cm_error').show();}
+             if($('#id_package_height').val()==''){$('#package_height_cm_error').show();}
+             if($('#id_image').val()==''){$('#package_images_error').show();}
+             if($('#id_package_sku').val()==''){$('#package_sku_error').show();}
+        }
+        return false;
+    });
+
+/*-------------------------------------------Packages Updated-----------------------------------------*/
+var updated_message = document.getElementById('updated_message');
+
+function refresh_packages(){
+    $('#package_options_section').load(location.href +  ' #package_options_section_row');
+    updated_message.style.display = 'block';
+    setTimeout(function(){
+         updated_message.style.display = 'none';
+    }, 3000);
+}
+
 
 
 /*-----------------------------------------Add Order----------------------------------------*/
@@ -479,6 +478,13 @@ $('#add_order_btn').click(function(){
                         $('.page-loader-container').hide();
                         $('.page-loader').hide();
                         location.reload();
+                        var message_container = document.getElementById('message-container');
+                        message_container.classList.remove('no-visible');
+                        message_container.classList.add('visible');
+                        setTimeout(function(){
+                            message_container.classList.remove('visible');
+                            message_container.classList.add('no-visible');
+                            }, 3000);
                     }
                 });
          }
@@ -547,6 +553,16 @@ $('#add_order_btn').click(function(){
                         $('.page-loader-container').hide();
                         $('.page-loader').hide();
                         location.reload();
+                        message_container.classList.remove('no-visible');
+                        message_container.classList.add('visible');
+                        setTimeout(function(){
+                            message_container.classList.remove('visible');
+                            }, 5000);
+                        setTimeout(function(){
+                            message_container.classList.add('no-visible');
+                            }, 5000);
+//                         $('#message-container').show();
+//                         $('#message-container').delay(3000).hide();
                     }
                 });
          }

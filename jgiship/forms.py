@@ -1,5 +1,14 @@
 from django import forms
-from django_countries.fields import CountryField
+from .models import PackageDetails, PackageImages
 
-class CustomForm(forms.Form):
-    country = CountryField(blank_label='(Select country)').formfield()
+
+class PackageDetailsForm(forms.ModelForm):
+    class Meta:
+        model = PackageDetails
+        fields = ['package_name', 'package_type', 'package_length', 'package_width',
+                  'package_height', 'package_quantity','package_sku']
+
+class PackageImageForm(forms.ModelForm):
+    class Meta:
+        model = PackageImages
+        fields = ['image']

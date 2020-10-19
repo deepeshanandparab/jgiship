@@ -455,7 +455,7 @@
                     <h5 class="mb-0">
                         <button class="btn btn-link text-dark no-text-decoration w-100 px-0 collapsed"
                                 data-toggle="collapse" data-target="#collapseThree" aria-expanded="false"
-                                aria-controls="collapseThree" id="collapseThree_btn" disabled>
+                                aria-controls="collapseThree" id="collapseThree_btn">
                             <span class="circle font-bold float-left" id="panel3">3</span>
                             <span class="circle font-bold float-left bg-success" id="panel3_check"
                                   style="display: none">
@@ -717,7 +717,9 @@
             <!--------------------------------------------------------------------------------------------------------->
 
             <div class="mb-4">
-                <button type="submit" id="add_order_btn" class="btn btn-success float-right mt-2 px-4 font-16" disabled>Add Order</button>
+                <button type="submit" id="add_order_btn" class="btn btn-success float-right mt-2 px-4 font-16" disabled>
+                    Add Order
+                </button>
             </div>
         </div>
 
@@ -832,19 +834,18 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form id="add_package_form" enctype="multipart/form-data">
+                        <form id="add_package_form" enctype="multipart/form-data" method="POST">
                             {% csrf_token %}
                             <div class="form-row mb-5">
                                 <div class="col-md-6">
-                                    <label for="package_name">Package Name <span class="text-danger">*</span></label>
-                                    <input type="text" id="package_name" class="form-control"
+                                    <label for="id_package_name">Package Name <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" name="package_name" id="id_package_name"
                                            placeholder="Enter package name">
-                                    <label id="package_name_error" class="text-danger font-12">Please enter package
-                                        name</label>
+                                    <label id="package_name_error" class="text-danger font-12">Please enter package name</label>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="package_type">Package Type <span class="text-danger">*</span></label>
-                                    <select id="package_type" class="form-control">
+                                    <label for="id_package_type">Package Type <span class="text-danger">*</span></label>
+                                    <select class="form-control" name="package_type" id="id_package_type" required>
                                         <option value="" selected>Select Package Type</option>
                                         <option value="box">Box</option>
                                         <option value="flyer">Flyer</option>
@@ -863,9 +864,10 @@
 
                             <div class="form-row mb-5" id="package_dimensions">
                                 <div class="form-group col-md-4">
-                                    <label for="package_length_cm">Length <span class="text-danger">*</span></label>
+                                    <label for="id_package_length">Length <span class="text-danger">*</span></label>
                                     <div class="input-group labelled-input">
-                                        <input type="number" class="form-control" id="package_length_cm" required>
+                                        <input type="number" class="form-control" name="package_length"
+                                               id="id_package_length" required>
                                         <div class="input-group-prepend">
                                             <div class="input-group-text">CM</div>
                                         </div>
@@ -876,9 +878,10 @@
                                 </div>
 
                                 <div class="form-group col-md-4">
-                                    <label for="package_width_cm">Width <span class="text-danger">*</span></label>
+                                    <label for="id_package_width">Width <span class="text-danger">*</span></label>
                                     <div class="input-group labelled-input">
-                                        <input type="number" class="form-control" id="package_width_cm" required>
+                                        <input type="number" class="form-control" name="package_width"
+                                               id="id_package_width" required>
                                         <div class="input-group-prepend">
                                             <div class="input-group-text">CM</div>
                                         </div>
@@ -889,9 +892,10 @@
                                 </div>
 
                                 <div class="form-group col-md-4">
-                                    <label for="package_height_cm">Height <span class="text-danger">*</span></label>
+                                    <label for="id_package_height">Height <span class="text-danger">*</span></label>
                                     <div class="input-group labelled-input">
-                                        <input type="number" class="form-control" id="package_height_cm" required>
+                                        <input type="number" class="form-control" name="package_height"
+                                               id="id_package_height" required>
                                         <div class="input-group-prepend">
                                             <div class="input-group-text">CM</div>
                                         </div>
@@ -913,14 +917,15 @@
 
                             <div class="form-row mb-1">
                                 <div class="col-md-6">
-                                    <label for="package_images">Upload Files <span class="text-danger">*</span></label>
-                                    <input type="file" id="package_images" class="form-control pt-3px" multiple>
+                                    <label for="id_image">Upload Files <span class="text-danger">*</span></label>
+                                    <input type="file" name="image" id="id_image" class="form-control pt-3px" multiple>
                                     <label id="package_images_error" class="text-danger font-12">Please select files to
                                         upload</label>
                                 </div>
                                 <div class="col-md-6" id="package_quantity_section" style="display: none;">
-                                    <label for="package_quantity">Package Quantity</label>
-                                    <input type="number" id="package_quantity" class="form-control" value="0"
+                                    <label for="id_package_quantity">Package Quantity</label>
+                                    <input type="number" name="package_quantity" value="0" id="id_package_quantity"
+                                           class="form-control" value="0"
                                            placeholder="Enter quantity available">
                                 </div>
                             </div>
@@ -945,15 +950,16 @@
 
                             <div class="form-row mb-3">
                                 <div class="col-md-6">
-                                    <label for="package_sku_code">Add Single SKU <span
+                                    <label for="id_package_sku">Add Single SKU <span
                                             class="text-danger font-12">*</span></label>
-                                    <input type="text" id="package_sku_code" class="form-control">
+                                    <input type="text" name="package_sku" id="id_package_sku" class="form-control">
                                     <label id="package_sku_error" class="text-danger font-12">Please enter sku</label>
                                 </div>
                             </div>
 
                             <div class="modal-footer">
-                                <button class="btn btn-primary px-4" id="add_package_details_btn">Add</button>
+                                <input type="submit" class="btn btn-primary px-4" id="add_package_details_btn"
+                                       value="Add">
                             </div>
                         </form>
                     </div>

@@ -8,6 +8,7 @@
     <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon"/>
     <link href="https://fonts.googleapis.com/css?family=Sonsie+One&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
     <meta charset="UTF-8">
     <!-- Font Awesome -->
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
@@ -25,8 +26,8 @@
 <body>
 <div class="page-loader" style="display: none!important;"></div>
 <div class="page-loader-container" style="display: none!important;"></div>
-<div class="d-flex justify-content-center" id="message-container">
-    <div class="text-center w-50 h-50 mt-3 alert alert-success message-box" role="alert">
+<div class="d-flex justify-content-center no-visible" id="message-container">
+    <div class="text-center w-50 h-50 mt-3 alert alert-success message-box left-25p" role="alert">
         <h5 class="text-success">Order Added Successfully !</h5>
     </div>
 </div>
@@ -188,30 +189,30 @@
         </ul>
 
         <div class="orders-top-nav">
-            <ul class="nav nav-tabs">
+            <ul class="nav nav-tabs" id="page_nav_bar">
                 <h4 class="mx-4 mt-1">Orders</h4>
                 <li class="nav-item">
-                    <a class="nav-link active" href="{% url 'process-order' %}">Processing
+                    <a class="nav-link {%if process_order_active == True%}active{%endif%}" href="{% url 'process-order' %}">Processing
                         <span class="badge bg-success text-white badge-pill ml-1 p-1">0</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'generate-pickup' %}">Ready To Ship
+                    <a class="nav-link {%if generate_pickup_page == True%}active{%endif%}" href="{% url 'generate-pickup' %}">Ready To Ship
                         <span class="badge bg-success text-white badge-pill ml-1 p-1">10</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'manifest' %}">Manifest
+                    <a class="nav-link {%if manifest_page == True%}active{%endif%}" href="{% url 'manifest' %}">Manifest
                         <span class="badge bg-success text-white badge-pill ml-1 p-1">100</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Returns
+                    <a class="nav-link {%if returns_page == True%}active{%endif%}" href="#">Returns
                         <span class="badge bg-success text-white badge-pill ml-1 p-1">1000</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'orders' %}">All Orders
+                    <a class="nav-link {%if orders_page == True%}active{%endif%}" href="{% url 'orders' %}">All Orders
                         <span class="badge bg-success text-white badge-pill ml-1 p-1">1000</span>
                     </a>
                 </li>
@@ -226,10 +227,10 @@
 
 <!--------------------------------------- Scripts --------------------------------------->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-
 
 <script src="{% static 'js/add_order.js' %}"></script>
 <script src="{% static 'js/add_order_form_submit.js' %}"></script>

@@ -1,8 +1,18 @@
-from django.contrib import messages
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render, redirect
-from jgiship.models import Buyer, PickupAddress, Order, Product, SelectedAddress, PackageDetails, PackageImages, PackageMetrics, OtherDetails
+from django.shortcuts import render
+from jgiship.forms import PackageDetailsForm, PackageImageForm
 from .states import STATES
+from jgiship.models import (Buyer,
+                            PickupAddress,
+                            Order,
+                            Product,
+                            SelectedAddress,
+                            PackageDetails,
+                            PackageImages,
+                            PackageMetrics,
+                            OtherDetails)
+
 
 def add_order(request):
     address_list = SelectedAddress.objects.all()
@@ -19,108 +29,22 @@ def add_order(request):
                'address_selected_check': address_selected,
                'package_list': package_list
                }
-    return render(request, 'jgiship/add_order.html', context)
 
+    if request.method == 'POST':
+        package_form = PackageDetailsForm(request.POST)
+        package_image_form = PackageImageForm(request.POST, request.FILES)
+        package_obj = package_form.save(commit=False)
+        package_obj.user = request.user
+        package_form.save()
 
-# def create_buyer(request):
-#     if request.method == 'POST':
-#         user = request.user
-#         buyer_name = request.POST['buyer_name']
-#         phone_number = request.POST['phone_number']
-#         alternate_phone_number = request.POST['alternate_phone_number']
-#         buyer_email = request.POST['buyer_email']
-#         address1 = request.POST['address1']
-#         address2 = request.POST['address2']
-#         pincode = request.POST['pincode']
-#         city = request.POST['city']
-#         state = request.POST['state']
-#         country = request.POST['country']
-#         company = request.POST['company']
-#         billing_address_checkbox = request.POST['billing_address_checkbox']
-#         billing_name = request.POST['billing_name']
-#         billing_phone_number = request.POST['billing_phone_number']
-#         billing_email = request.POST['billing_email']
-#         billing_address1 = request.POST['billing_address1']
-#         billing_address2 = request.POST['billing_address2']
-#         billing_pincode = request.POST['billing_pincode']
-#         billing_city = request.POST['billing_city']
-#         billing_state = request.POST['billing_state']
-#         billing_country = request.POST['billing_country']
-#
-#         buyer_instance = Buyer.objects.create(
-#             user = user,
-#             buyer_name = buyer_name,
-#             phone_number = phone_number,
-#             alternate_phone_number = alternate_phone_number,
-#             email_id = buyer_email,
-#             address_line1 = address1,
-#             address_line2 = address2,
-#             pincode = pincode,
-#             city = city,
-#             state = state,
-#             country = country,
-#             company_name = company,
-#             same_billing_address = billing_address_checkbox,
-#             billing_buyer_name = billing_name,
-#             billing_phone_number = billing_phone_number,
-#             billing_email_id = billing_email,
-#             billing_address_line1 = billing_address1,
-#             billing_address_line2 = billing_address2,
-#             billing_pincode = billing_pincode,
-#             billing_city = billing_city,
-#             billing_state = billing_state,
-#             billing_country = billing_country
-#         )
-#     return HttpResponse(Buyer)
-
-
-
-# def create_order(request):
-#     if request.method == 'POST':
-#         id = request.POST['order_id']
-#         order_date = request.POST['order_date']
-#         order_channel = request.POST['order_channel']
-#         product_name = request.POST['product_name']
-#         sku = request.POST['sku']
-#         quantity = request.POST['quantity']
-#         unit_price = request.POST['unit_price']
-#         tax_rate = request.POST['tax_rate']
-#         hsn = request.POST['hsn']
-#         discount = request.POST['discount']
-#         product_category = request.POST['product_category']
-#         payment_method = request.POST['payment_method']
-#         sub_total = request.POST['sub_total']
-#         shipping_charge = request.POST['shipping_charge']
-#         giftwrap_charge = request.POST['giftwrap_charge']
-#         transaction_charge = request.POST['transaction_charge']
-#         extra_discount = request.POST['extra_discount']
-#         total = request.POST['total']
-#
-#         order_instance = Order.objects.create(
-#             id=id,
-#             order_date=order_date,
-#             order_channel=order_channel
-#         )
-#
-#         Product.objects.create(
-#             order = order_instance,
-#             product_name = product_name,
-#             sku = sku,
-#             quantity = quantity,
-#             unit_price = unit_price,
-#             tax_rate = tax_rate,
-#             hsn = hsn,
-#             discount = discount,
-#             product_category = product_category,
-#             payment_method = payment_method,
-#             sub_total = sub_total,
-#             shipping_charge = shipping_charge,
-#             giftwrap_charge = giftwrap_charge,
-#             transaction_charge = transaction_charge,
-#             extra_discount = extra_discount,
-#             total = total
-#         )
-#     return HttpResponse('')
+        package_image_obj = package_image_form.save(commit=False)
+        package_image_obj.package = package_obj
+        package_image_form.save()
+        return render(request, 'jgiship/add_order.html', context)
+    else:
+        package_form = PackageDetailsForm()
+        package_image_form = PackageImageForm()
+    return render(request, 'jgiship/add_order.html', {'package_form': package_form, 'package_image_form': package_image_form}, context)
 
 
 
@@ -245,36 +169,6 @@ def delete_pickup_address(request):
         return JsonResponse({'status':1})
     else:
         return JsonResponse({'status':0})
-
-
-def add_package_details(request):
-    if request.method == 'POST':
-        user = request.user
-        package_name = request.POST.get('package_name')
-        package_type = request.POST.get('package_type')
-        package_length = request.POST.get('package_length_cm')
-        package_width = request.POST.get('package_width_cm')
-        package_height = request.POST.get('package_width_cm')
-        package_quantity = request.POST.get('package_quantity')
-        package_sku = request.POST.get('package_sku_code')
-        image = request.POST.get('package_files')
-
-        package_details_instance = PackageDetails.objects.create(
-            user=user,
-            package_name=package_name,
-            package_type=package_type,
-            package_length=package_length,
-            package_width=package_width,
-            package_height=package_height,
-            package_quantity=package_quantity,
-            package_sku=package_sku
-        )
-
-        PackageImages.objects.create(
-            package = package_details_instance,
-            image=image
-        )
-    return HttpResponse('')
 
 
 
@@ -417,17 +311,37 @@ def add_new_order(request):
 
 
 def process_order(request):
-    context = {'title': 'Process Order'}
+    context = {'title': 'Process Order', 'process_order_active': True, 'generate_pickup_page': False, 'manifest_page': False, 'orders_page': False}
     return render(request, 'jgiship/process_order.html', context)
 
 def generate_pickup(request):
-    context = {'title': 'Generate Pickup'}
+    context = {'title': 'Generate Pickup', 'process_order_active': False, 'generate_pickup_page': True, 'manifest_page': False, 'orders_page': False}
     return render(request, 'jgiship/generate_pickup.html', context)
 
 def manifest(request):
-    context = {'title': 'Download Manifest'}
+    context = {'title': 'Download Manifest', 'process_order_active': False, 'generate_pickup_page': False, 'manifest_page': True, 'orders_page': False}
     return render(request, 'jgiship/manifest.html', context)
 
 def orders(request):
-    context = {'title': 'Previous Orders'}
+    order_list = Order.objects.all()
+
+    paginator = Paginator(order_list, 6)
+    page = request.GET.get('page')
+    try:
+        response = paginator.page(page)
+    except PageNotAnInteger:
+        response = paginator.page(1)
+    except EmptyPage:
+        response = paginator.page(paginator.num_pages)
+
+    first_item_number = 6 * (response.number - 1) + 1
+    context = {'title': 'Previous Orders',
+               'process_order_active': False,
+               'generate_pickup_page': False,
+               'manifest_page': False,
+               'orders_page': True,
+               'order_list':response,
+               'page_size': 6,
+               'first_item_number': first_item_number
+               }
     return render(request, 'jgiship/orders.html', context)

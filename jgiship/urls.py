@@ -13,7 +13,7 @@ urlpatterns = [
     path('pickup-address/select/', views.select_pickup_address, name='select-pickup-address'),
     path('pickup-address/delete/', views.delete_pickup_address, name='delete-pickup-address'),
 
-    path('package-details/create/', views.add_package_details, name='add-package-details'),
+    # path('package-details/create/', views.add_package_details, name='add-package-details'),
 
     path('generate-pickup/', views.generate_pickup, name='generate-pickup'),
     path('process-order/', views.process_order, name='process-order'),

@@ -1,7 +1,146 @@
 {% extends 'jgiship/base.html' %}
+{% load mathfilters %}
+{% load humanize %}
 
 {% block content %}
-<div class="text-center">
-    <h1>Orders</h1>
-</div>
+<table id="orders_table" class="table table-striped table-bordered bg-white font-13">
+    <thead>
+    <tr>
+        <th>ORDER DATE</th>
+        <th>CHANNEL</th>
+        <th>ORDER ID</th>
+        <th>PRODUCT DETAILS</th>
+        <th>PAYMENT</th>
+        <th>CUSTOMER DETAILS</th>
+        <th>DIMENSIONS & WEIGHT</th>
+        <th>SHIPPING DETAILS</th>
+        <th>STATUS</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for order in order_list %}
+    <tr>
+        <td>{{order.order_date}}</td>
+        <td>{{order.order_channel}}</td>
+        <td>{{order.id}}</td>
+        {% for product in order.product_order.all %}
+        <td>
+            Name: {{product.product_name}}<br>
+            SKU: {{product.sku}}<br>
+            Quantity: {{product.quantity}}
+        </td>
+        <td>
+            ₹ {{product.total|floatformat:2|intcomma}}<br>
+            <span class="badge bg-success text-white badge-pill">
+                        {% if product.payment_method == 'cod' %}Cash On Delivery{% else %}Prepaid{% endif %}
+                    </span>
+        </td>
+        {% empty %}
+        <td class="text-center">-</td>
+        {% endfor %}
+        <td>
+            {{order.buyer.buyer_name}}<br>
+            {{order.buyer.email_id}}<br>
+            {{order.buyer.phone_number}}
+        </td>
+        {% for package in order.package_metrics_order.all %}
+        <td>
+            {{package.length|floatformat:0}} x {{package.width|floatformat:0}} x {{package.height|floatformat:0}} cm<br>
+            Volumetric: {{package.volumetric_weight}}<br>
+            Entered: {{package.weight}}
+        </td>
+        {% empty %}
+        <td class="text-center">-</td>
+        {% endfor %}
+        {% for address_list in order.buyer.user.pickupaddress_order.all %}
+            {% for selected_address in address_list.pickupaddress.all %}
+                {% if selected_address.is_supplier_address == True %}
+                    <td>Pickup Address: {{selected_address.address.address_nickname}}</td>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+        <td>-</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td>No Order Data Available</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<!---------------------------------------- Pagination Section Start ------------------------------------------->
+            <div class="row mx-1">
+                <div class="col-md-6 pl-0 mb-2">
+                    <b>
+                        {% if order_list.paginator.count > 0 %}
+                        <small class="font-bold">
+                            {{ first_item_number }}
+                            -
+                            {% if page_size|mul:order_list.number > order_list.paginator.count %}
+                            {{ order_list.paginator.count }}
+                            {% else %}
+                            {{ page_size|mul:order_list.number }}
+                            {% endif %}
+                            of
+                            {{ order_list.paginator.count }}
+                        </small>
+                        {% endif %}
+                    </b>
+                </div>
+
+                <div class="col-md-6 pr-0">
+                    <nav class="float-right">
+                        {% if order_list.paginator.count > page_size and order_list.paginator.count > 0 %}
+                        <!---------------- Pagination Start ----------------------->
+                        <ul class="pagination pagination-sm">
+                            {% if order_list.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link text-dark" href="?page=1">
+                                    <i class="fa fa-angle-double-left font-bold"></i>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link text-dark" href="?page={{ order_list.previous_page_number }}"
+                                   tabindex="-1">
+                                    <i class="fa fa-angle-left"></i>
+                                </a>
+                            </li>
+                            {% endif %}
+
+                            <!-------------------------- Page Number Start --------------------------->
+                            {% for page in order_list.paginator.page_range %}
+                            {% if page == order_list.number %}
+                            <li class="page-item disabled">
+                                <a class="page-link text-dark bg-custom font-bold" href="#">
+                                    {{ page }}
+                                </a>
+                            </li>
+                            {% elif page <= order_list.number|add:3 and page >= order_list.number|add:-3  %}
+                            <li class="page-item"><a class="page-link text-dark" href="?page={{ page }}">{{ page }}</a>
+                            </li>
+                            {% endif %}
+                            {% endfor %}
+                            <!-------------------------- Page Number End ------------------------------>
+
+                            {% if order_list.has_next %}
+                            <li class="page-item">
+                                <a class="page-link text-dark" href="?page={{ order_list.next_page_number }}">
+                                    <i class="fa fa-angle-right"></i>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link text-dark" href="?page={{ order_list.paginator.num_pages }}">
+                                    <i class="fa fa-angle-double-right font-bold"></i>
+                                </a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                        {% endif %}
+                        <!---------------- Pagination End ----------------------->
+
+                    </nav>
+                </div>
+            </div>
+            <!---------------------------------------- Pagination Section End ------------------------------------------->
 {% endblock %}

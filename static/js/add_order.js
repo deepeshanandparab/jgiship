@@ -1,7 +1,4 @@
-var message_container = document.getElementById('message-container');
-    setTimeout(function(){
-        message_container.classList.add('noDisplay');
-        }, 3000);
+
 
 function showBillingForm() {
   var checkBox = document.getElementById("billing_address_checkbox");

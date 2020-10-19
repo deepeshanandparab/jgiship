@@ -39,7 +39,7 @@ class Order(models.Model):
         return f'{self.id}'
 
 class Product(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE,  related_name='product_order')
     product_name = models.CharField(max_length=20)
     sku = models.IntegerField(null=True, blank=True)
     quantity = models.IntegerField()
@@ -61,7 +61,7 @@ class Product(models.Model):
 
 
 class PickupAddress(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='pickupaddress_order')
     address_nickname = models.CharField(max_length=20)
     contact_name = models.CharField(max_length=30)
     phone_number = models.IntegerField()
@@ -76,7 +76,7 @@ class PickupAddress(models.Model):
         return f'{self.address_nickname} ({self.id})'
 
 class SelectedAddress(models.Model):
-    address = models.ForeignKey(PickupAddress, on_delete=models.CASCADE)
+    address = models.ForeignKey(PickupAddress, on_delete=models.CASCADE, related_name='pickupaddress')
     is_supplier_address = models.BooleanField(default=False)
 
     def __str__(self):
@@ -104,7 +104,7 @@ class PackageImages(models.Model):
 
 
 class PackageMetrics(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='package_metrics_order')
     weight = models.FloatField()
     length = models.FloatField()
     width = models.FloatField()
