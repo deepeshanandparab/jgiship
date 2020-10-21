@@ -213,9 +213,12 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {%if orders_page == True%}active{%endif%}" href="{% url 'orders' %}">All Orders
-                        <span class="badge bg-success text-white badge-pill ml-1 p-1">1000</span>
+                        <span class="badge bg-success text-white badge-pill ml-1 p-1">{{ order_list.paginator.count }}</span>
                     </a>
                 </li>
+                <a href="{% url 'add-order' %}" class="bg-primary ml-auto mr-2 pt-1 no-text-decoration text-white my-1 border-radius-30px px-2">
+                    <i class="fa fa-plus mr-2"></i>Add Order
+                </a>
             </ul>
         </div>
 

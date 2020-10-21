@@ -3,9 +3,67 @@
 {% load humanize %}
 
 {% block content %}
-<table id="orders_table" class="table table-striped table-bordered bg-white font-13">
+<div class="row mb-2">
+    <div class="col-3">
+        <div class="input-group md-form form-sm form-2">
+            <form method="get" class="form-inline w-100" id="search_filter">
+                <input type="text" name="id" placeholder="Search by order id" autocomplete="false"
+                       class="form-control my-0 py-1 border-radius-left-30px font-12 w-80" id="id_id">
+
+                <button class="input-group-text lighten-3 border-radius-right-30px font-18" type="submit">
+                    <i class="fa fa-search text-grey" aria-hidden="true"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-3">
+        <div class="input-group md-form form-sm form-2">
+            <form method="get" class="form-inline w-100" id="phone_number_filter">
+                <input type="text" name="phone_number" placeholder="Search by customer" autocomplete="false"
+                       class="form-control my-0 py-1 border-radius-left-30px font-12 w-80" id="id_phone_number">
+
+                <button class="input-group-text lighten-3 border-radius-right-30px font-18" type="submit">
+                    <i class="fa fa-search text-grey" aria-hidden="true"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-3 pl-0">
+        <div class="input-group md-form form-sm form-2">
+            <form method="get" class="w-100" id="order_date_filter">
+                <select class="form-control border-radius-30px font-12" name="date_filter"
+                        onchange="this.form.submit()">
+                    <option value="all">All</option>
+                    <option value="0">Today</option>
+                    <option value="1">Yesterday</option>
+                    <option value="7">Last 7 Days</option>
+                    <option value="30">Last 30 Days</option>
+                    <option value="30">This Month</option>
+                    <option value="60">Last Month</option>
+                </select>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-3 pl-0">
+        <div class="input-group md-form form-sm form-2">
+            <form method="get" class="w-100" id="payment_method_filter">
+                <select class="form-control border-radius-30px font-12" name="payment_method"
+                        onchange="this.form.submit()">
+                    <option value="">Select Payment Methods</option>
+                    <option value="cod">Cash On Delivery</option>
+                    <option value="prepaid">Prepaid</option>
+                </select>
+            </form>
+        </div>
+    </div>
+</div>
+
+<table id="orders_table" class="table table-bordered bg-white font-12">
     <thead>
-    <tr>
+    <tr class="bg-grey">
         <th>ORDER DATE</th>
         <th>CHANNEL</th>
         <th>ORDER ID</th>
@@ -32,8 +90,8 @@
         <td>
             ₹ {{product.total|floatformat:2|intcomma}}<br>
             <span class="badge bg-success text-white badge-pill">
-                        {% if product.payment_method == 'cod' %}Cash On Delivery{% else %}Prepaid{% endif %}
-                    </span>
+                {% if product.payment_method == 'cod' %}Cash On Delivery{% else %}Prepaid{% endif %}
+            </span>
         </td>
         {% empty %}
         <td class="text-center">-</td>
@@ -53,94 +111,99 @@
         <td class="text-center">-</td>
         {% endfor %}
         {% for address_list in order.buyer.user.pickupaddress_order.all %}
-            {% for selected_address in address_list.pickupaddress.all %}
-                {% if selected_address.is_supplier_address == True %}
-                    <td>Pickup Address: {{selected_address.address.address_nickname}}</td>
-                {% endif %}
-            {% endfor %}
+        {% for selected_address in address_list.pickupaddress.all %}
+        {% if selected_address.is_supplier_address == True %}
+        <td>
+            Courier: <br>
+            AWB No.: <br>
+            Pickup Address: {{selected_address.address.address_nickname}}
+            <input type="button" class="btn btn-primary font-12 border-radius-30px mt-2" value="Add Package Images">
+        </td>
+        {% endif %}
+        {% endfor %}
         {% endfor %}
         <td>-</td>
     </tr>
     {% empty %}
-    <tr>
-        <td>No Order Data Available</td>
+    <tr class="text-center">
+        <td colspan="9" class="py-5">No Order Data Available</td>
     </tr>
     {% endfor %}
     </tbody>
 </table>
 
 <!---------------------------------------- Pagination Section Start ------------------------------------------->
-            <div class="row mx-1">
-                <div class="col-md-6 pl-0 mb-2">
-                    <b>
-                        {% if order_list.paginator.count > 0 %}
-                        <small class="font-bold">
-                            {{ first_item_number }}
-                            -
-                            {% if page_size|mul:order_list.number > order_list.paginator.count %}
-                            {{ order_list.paginator.count }}
-                            {% else %}
-                            {{ page_size|mul:order_list.number }}
-                            {% endif %}
-                            of
-                            {{ order_list.paginator.count }}
-                        </small>
-                        {% endif %}
-                    </b>
-                </div>
+<div class="row mx-1">
+    <div class="col-md-6 pl-0 mb-2">
+        <b>
+            {% if order_list.paginator.count > 0 %}
+            <small class="font-bold">
+                {{ first_item_number }}
+                -
+                {% if page_size|mul:order_list.number > order_list.paginator.count %}
+                {{ order_list.paginator.count }}
+                {% else %}
+                {{ page_size|mul:order_list.number }}
+                {% endif %}
+                of
+                {{ order_list.paginator.count }}
+            </small>
+            {% endif %}
+        </b>
+    </div>
 
-                <div class="col-md-6 pr-0">
-                    <nav class="float-right">
-                        {% if order_list.paginator.count > page_size and order_list.paginator.count > 0 %}
-                        <!---------------- Pagination Start ----------------------->
-                        <ul class="pagination pagination-sm">
-                            {% if order_list.has_previous %}
-                            <li class="page-item">
-                                <a class="page-link text-dark" href="?page=1">
-                                    <i class="fa fa-angle-double-left font-bold"></i>
-                                </a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link text-dark" href="?page={{ order_list.previous_page_number }}"
-                                   tabindex="-1">
-                                    <i class="fa fa-angle-left"></i>
-                                </a>
-                            </li>
-                            {% endif %}
+    <div class="col-md-6 pr-0">
+        <nav class="float-right">
+            {% if order_list.paginator.count > page_size and order_list.paginator.count > 0 %}
+            <!---------------- Pagination Start ----------------------->
+            <ul class="pagination pagination-sm">
+                {% if order_list.has_previous %}
+                <li class="page-item">
+                    <a class="page-link text-dark" href="?page=1">
+                        <i class="fa fa-angle-double-left font-bold"></i>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link text-dark" href="?page={{ order_list.previous_page_number }}"
+                       tabindex="-1">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                </li>
+                {% endif %}
 
-                            <!-------------------------- Page Number Start --------------------------->
-                            {% for page in order_list.paginator.page_range %}
-                            {% if page == order_list.number %}
-                            <li class="page-item disabled">
-                                <a class="page-link text-dark bg-custom font-bold" href="#">
-                                    {{ page }}
-                                </a>
-                            </li>
-                            {% elif page <= order_list.number|add:3 and page >= order_list.number|add:-3  %}
-                            <li class="page-item"><a class="page-link text-dark" href="?page={{ page }}">{{ page }}</a>
-                            </li>
-                            {% endif %}
-                            {% endfor %}
-                            <!-------------------------- Page Number End ------------------------------>
+                <!-------------------------- Page Number Start --------------------------->
+                {% for page in order_list.paginator.page_range %}
+                {% if page == order_list.number %}
+                <li class="page-item disabled">
+                    <a class="page-link text-dark bg-custom font-bold" href="#">
+                        {{ page }}
+                    </a>
+                </li>
+                {% elif page <= order_list.number|add:3 and page >= order_list.number|add:-3 %}
+                <li class="page-item"><a class="page-link text-dark" href="?page={{ page }}">{{ page }}</a>
+                </li>
+                {% endif %}
+                {% endfor %}
+                <!-------------------------- Page Number End ------------------------------>
 
-                            {% if order_list.has_next %}
-                            <li class="page-item">
-                                <a class="page-link text-dark" href="?page={{ order_list.next_page_number }}">
-                                    <i class="fa fa-angle-right"></i>
-                                </a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link text-dark" href="?page={{ order_list.paginator.num_pages }}">
-                                    <i class="fa fa-angle-double-right font-bold"></i>
-                                </a>
-                            </li>
-                            {% endif %}
-                        </ul>
-                        {% endif %}
-                        <!---------------- Pagination End ----------------------->
+                {% if order_list.has_next %}
+                <li class="page-item">
+                    <a class="page-link text-dark" href="?page={{ order_list.next_page_number }}">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link text-dark" href="?page={{ order_list.paginator.num_pages }}">
+                        <i class="fa fa-angle-double-right font-bold"></i>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+            {% endif %}
+            <!---------------- Pagination End ----------------------->
 
-                    </nav>
-                </div>
-            </div>
-            <!---------------------------------------- Pagination Section End ------------------------------------------->
+        </nav>
+    </div>
+</div>
+<!---------------------------------------- Pagination Section End ------------------------------------------->
 {% endblock %}

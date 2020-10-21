@@ -26,12 +26,12 @@ class Buyer(models.Model):
     billing_country = models.CharField(max_length=20)
 
     def __str__(self):
-        return f'{self.buyer_name}'
+        return f'{self.buyer_name} {self.id}'
 
 
 class Order(models.Model):
     id = models.IntegerField(primary_key=True)
-    buyer = models.ForeignKey(Buyer, on_delete=models.DO_NOTHING, null=True, blank=True)
+    buyer = models.ForeignKey(Buyer, on_delete=models.DO_NOTHING, null=True, blank=True, related_name='buyer_order')
     order_date = models.DateField()
     order_channel = models.CharField(max_length=40)
 

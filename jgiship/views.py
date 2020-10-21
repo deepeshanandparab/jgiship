@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
@@ -12,6 +13,7 @@ from jgiship.models import (Buyer,
                             PackageImages,
                             PackageMetrics,
                             OtherDetails)
+from .filters import OrderIdFilter
 
 
 def add_order(request):
@@ -323,9 +325,28 @@ def manifest(request):
     return render(request, 'jgiship/manifest.html', context)
 
 def orders(request):
-    order_list = Order.objects.all()
+    if 'phone_number' in request.GET and request.GET['phone_number']:
+        phone_number = request.GET['phone_number']
+        buyer_list = Buyer.objects.filter(phone_number=phone_number)
+        buyer_id_list = []
+        buyer_id_list.append(buyer_list)
+        order_list = Order.objects.filter(buyer__in=buyer_id_list[0]).order_by('-order_date')
+    elif 'payment_method' in request.GET and request.GET['payment_method']:
+        payment_method = request.GET['payment_method']
+        product_list = Product.objects.filter(payment_method=payment_method)
+        payment_id_list = []
+        payment_id_list.append(product_list)
+        order_list = Order.objects.filter(product_order__in=payment_id_list[0]).order_by('-order_date')
+    elif 'date_filter' in request.GET and request.GET['date_filter']:
+        counter = request.GET['date_filter']
+        date_filter = datetime.now() - timedelta(days=int(counter))
+        order_list = Order.objects.filter(order_date__gte=date_filter).order_by('-order_date')
+    else:
+        order_list = Order.objects.all().order_by('-order_date')
 
-    paginator = Paginator(order_list, 6)
+    filter = OrderIdFilter(request.GET, queryset=order_list)
+    order_filter = OrderIdFilter(request.GET, queryset=order_list).qs
+    paginator = Paginator(order_filter, 6)
     page = request.GET.get('page')
     try:
         response = paginator.page(page)
@@ -336,12 +357,13 @@ def orders(request):
 
     first_item_number = 6 * (response.number - 1) + 1
     context = {'title': 'Previous Orders',
-               'process_order_active': False,
-               'generate_pickup_page': False,
-               'manifest_page': False,
-               'orders_page': True,
-               'order_list':response,
-               'page_size': 6,
-               'first_item_number': first_item_number
-               }
+                'process_order_active': False,
+                'generate_pickup_page': False,
+                'manifest_page': False,
+                'order_id_filter': filter,
+                'orders_page': True,
+                'order_list':response,
+                'page_size': 6,
+                'first_item_number': first_item_number
+                }
     return render(request, 'jgiship/orders.html', context)

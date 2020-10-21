@@ -217,6 +217,10 @@ select {
     font-size: 16px!important;
 }
 
+.font-18{
+    font-size: 18px!important;
+}
+
 .font-20{
     font-size: 20px!important;
 }
@@ -341,6 +345,10 @@ input[type="file" button] {
     width: 90%!important;
 }
 
+.w-80{
+    width: 80%!important;
+}
+
 .no-visible{
     display: none!important;
 }
@@ -352,5 +360,24 @@ input[type="file" button] {
 .left-25p{
     left: 25%important;
 }
+
+.bg-grey{
+    background: #cfcfcf!important;
+}
+
+.border-radius-30px{
+    border-radius: 30px!important;
+}
+
+.border-radius-left-30px{
+    border-radius: 30px 0px 0px 30px!important;
+}
+
+.border-radius-right-30px{
+    border-radius: 0px 30px 30px 0px!important;
+}
+
+
+
 
 
